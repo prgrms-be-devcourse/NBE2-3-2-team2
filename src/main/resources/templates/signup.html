@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="css/my-login.css">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.querySelector("form");
+      form.addEventListener("submit", signup);
+    });
+
+    let isEmailVerification = false;
+
+    async function signup(event) {
+      event.preventDefault();
+
+      const nickname = document.getElementById("nickname").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const birthDate = document.getElementById("birthDate").value;
+      const errorMessage = document.getElementById('error-message'); // 여기로 이동
+
+      // Validation
+      if (!nickname || !email || !password || !birthDate) {
+        errorMessage.textContent = "모든 필드를 입력해주세요.";
+        return;
+      }
+      if (!isEmailVerification) {
+        errorMessage.textContent = "이메일 인증을 완료해주세요.";
+        return;
+      }
+
+      try {
+        const response = await fetch('/signup', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({nickname, email, password, birthDate})
+        });
+
+        if (response.ok) {
+          errorMessage.textContent = "";
+          alert('회원가입 성공!');
+          window.location.href = '/login'; // 회원가입 성공 후 메인 페이지로 이동
+        } else if (response.status === 400) {
+          errorMessage.textContent = "";
+          errorMessage.textContent = await response.text();
+        } else {
+          errorMessage.textContent = "회원가입 중 문제가 발생했습니다. 다시 시도해주세요.";
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert("서버와 연결 중 문제가 발생했습니다. 다시 시도해주세요.");
+      }
+    }
+
+    let authCode = null;  // 서버에서 받은 인증 코드를 저장할 변수
+    async function sendVerificationCode() {
+      const errorMessage = document.getElementById('error-message'); // 여기로 이동
+      const email = document.getElementById("email").value;
+      if (email) {
+        try {
+          const response = await fetch('/send-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email }) // Send email to the server
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            errorMessage.textContent = "";
+            authCode = result.authCode; // 인증 코드 저장
+            document.getElementById('auth-code-input').style.display = 'inline-block';
+            //document.getElementById('auth-code-confirm').style.display = 'inline-block';
+          } else {
+            // 서버에서 반환된 에러 메시지 처리
+            const errorResult = await response.json();
+            errorMessage.textContent = errorResult.message;
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert("서버와 연결 중 문제가 발생했습니다. 다시 시도해주세요.");
+        }
+      }
+    }
+
+    async function confirmAuthenticationCode() {
+      const errorMessage = document.getElementById('error-message'); // 여기로 이동
+      const enteredCode = document.getElementById("auth-code").value;
+      if (!enteredCode) {
+        errorMessage.textContent = "인증번호를 입력해주세요.";
+        return;
+      }
+      isEmailVerification = false;
+      if (authCode !== null) {
+        console.log("authCode : " + authCode);
+        console.log("enteredCode : " + enteredCode);
+        if (enteredCode === String(authCode)) {
+          errorMessage.textContent = "";
+          alert("인증번호가 확인되었습니다. 인증 성공!");
+          document.getElementById("email").readOnly = true;
+          document.getElementById("auth-code").readOnly = true;
+
+          document.getElementById("email-verification-button").disabled = true;
+          document.getElementById("auth-code-confirm-button").disabled = true;
+
+          isEmailVerification = true;
+        } else {
+          errorMessage.textContent = "인증번호가 틀렸습니다. 다시 시도해주세요.";
+        }
+      } else {
+        alert("인증번호를 보내지 않았습니다. 다시 시도해주세요.");
+      }
+    }
+  </script>
+</head>
+<body class="my-login-page">
+<section class="h-100">
+  <div class="container h-100">
+    <div class="row justify-content-md-center h-100">
+      <div class="card-wrapper">
+        <a th:href="@{/}">
+          <img th:src="@{/images/letmovielogo6.png}" alt="logo">
+        </a>
+        <div class="card fat">
+          <div class="card-body">
+            <h4 class="card-title text-center">회원가입</h4>
+            <form class="my-login-validation">
+              <div class="form-group">
+                <label for="nickname">닉네임</label>
+                <input id="nickname" type="text" class="form-control" placeholder="닉네임을 입력하세요" required>
+                <div class="invalid-feedback">닉네임을 입력하세요.</div>
+              </div>
+              <div class="form-group">
+                <label for="email">이메일</label>
+                <input id="email" type="email" class="form-control" placeholder="이메일을 입력하세요" required>
+                <button type="button" id="email-verification-button" class="btn btn-outline-secondary inner-btn" onclick="sendVerificationCode()">이메일 인증</button>
+                <div class="invalid-feedback">유효하지 않은 이메일입니다.</div>
+              </div>
+              <!-- 인증번호 입력 필드 및 버튼, 기본적으로 숨김 처리 -->
+              <div class="form-group" id="auth-code-input" style="display: none; width: 100%">
+                <label for="auth-code">인증번호</label>
+                <input id="auth-code" type="text" class="form-control" placeholder="인증번호를 입력하세요">
+                <button type="button" style="float: right" id="auth-code-confirm-button" class="btn btn-outline-secondary inner-btn" onclick="confirmAuthenticationCode()">확인</button>
+              </div>
+              <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input id="password" type="password" class="form-control" placeholder="비밀번호를 입력하세요" required>
+                <div class="invalid-feedback">비밀번호를 입력하세요.</div>
+              </div>
+              <div class="form-group">
+                <label for="birthDate">생년월일</label>
+                <input id="birthDate" type="text" class="form-control" placeholder="생년월일을 입력하세요 (예: 19900101)" required>
+                <div class="invalid-feedback">생년월일을 입력하세요.</div>
+              </div>
+              <div id="error-message" style="color: red; text-align: center; margin-bottom: 10px;"></div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">회원가입</button>
+              </div>
+              <div class="mt-4 text-center">
+                계정이 있으신가요? <a href="/login">로그인</a>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="footer text-center mt-4">
+          Copyright &copy; 2024 &mdash; LetMovie
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

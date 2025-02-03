@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예매내역 조회</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/reservation_details.css}">
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const cancelButtons = document.querySelectorAll(".cancel");
+
+            cancelButtons.forEach(button => {
+                button.addEventListener("click", async () => {
+                    const reservationId = button.getAttribute("data-cancel-id");
+                    try {
+                        if (confirm("정말로 예매를 취소하시겠습니까?")) {
+                            const response = await fetch("/reservations/cancel", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/x-www-form-urlencoded",
+                                },
+                                body: new URLSearchParams({ reservationId })
+                            });
+
+                            if (response.ok) {
+                                alert("예매 취소가 성공적으로 완료되었습니다.");
+                                location.reload();
+                            } else {
+                                throw new Error("예매 취소에 실패했습니다.");
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error:", error);
+                        alert("취소 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+<!-- Sidebar navigation -->
+<div th:replace="~{fragments/mypage_sidebar :: sidebar}"></div>
+<main>
+    <h1>예매 내역 조회</h1>
+    <!-- 예매 내역이 없는 경우 -->
+    <p th:if="${reservations.isEmpty()}" style="color: gray;">
+        현재 예매 내역이 없습니다.
+    </p>
+    <!-- 예매 내역이 있는 경우 -->
+    <div th:if="${not #lists.isEmpty(reservations)}" id="cards-container">
+        <div th:each="reservation : ${reservations}" class="card">
+            <!-- <div class="card-header"><strong>예매 상태 : </strong> <span th:text="${reservation.reservationStatus.name()}"></span></div> -->
+            <div class="card-header"><span th:text="'예매 상태: ' + ${reservation.reservationStatusDisplayName}"></span></div>
+            <div class="card-content">
+            <!-- 이미지 -->
+            <div>
+                <img th:src="${reservation.posterUrl}" th:alt="${reservation.movieName}" alt="Thumbnail">
+            </div>
+                
+                <div class="details">
+                
+                <div><strong>예매번호 : </strong> <span th:text="${reservation.reservationId}"></span></div>
+                <div><strong>영화 이름 : </strong> <span th:text="${reservation.movieName}"></span></div>
+                <div><strong>극장/관 : </strong> <span th:text="${reservation.theaterName} + ' / ' + ${reservation.screenName}"></span></div>
+                <div><strong>관람 일시 : </strong> <span th:text="${reservation.showtimeDate} + ' ' + ${reservation.showtimeTime}"></span></div>
+                <div><strong>관람 인원 : </strong> <span th:text="${reservation.totalSeats}"></span></div>
+                    <div>
+                        <strong>좌석번호: </strong>
+                        <span th:each="seat : ${reservation.seats}" th:text="${seat.seatLow} + '-' + ${seat.seatCol} + ' '"> </span>
+                    </div>
+                </div>
+                <div class="details">
+                    
+                </div>
+                <!-- <div>
+                    <strong>결제일시:</strong>
+                    <span class="payment-date" th:text="${reservation.formattedPaymentAt}"></span>
+                    <button class="payment-info-button" id="payment">결제정보</button>
+                </div> -->
+                <div>
+                    <!-- 예매 취소 버튼 -->
+                    <div th:if="${reservation.reservationStatus.name() == 'COMPLETED'}" class="actions">
+                        <button class="cancel"
+                                th:attr="data-cancel-id=${reservation.reservationId}">
+                            예매 취소
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

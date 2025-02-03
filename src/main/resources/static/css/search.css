@@ -1,0 +1,44 @@
+/* 팝업 창 스타일 */
+#search-popup {
+    position: absolute;
+    top: 6%; /* 헤더 바로 아래 */
+    left: 0;
+    width: 100%; /* 홈페이지 전체 너비 */
+    z-index: 1050; /* 헤더보다 위에 표시 */
+    background: #f8f9fa; /* 밝은 배경색 */
+    /*border-top: 2px solid #000000; !* 상단 경계선 *!*/
+    display: none; /* 기본적으로 숨김 처리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+/* 팝업 내부 컨텐츠 스타일 */
+#search-popup .container {
+    max-width: 1200px; /* 중앙 정렬 및 고정 너비 */
+    margin: 0 auto;
+}
+
+#search-popup .bg-light {
+    background: #e3f2fd;
+    /*background: linear-gradient(135deg, #e3f2fd, #ffffff); !* 그라데이션 배경 *!*/
+    padding: 20px;
+    border-radius: 8px;
+}
+
+#search-popup h5 {
+    font-weight: bold;
+    color: #007bff; /* 제목 색상 */
+}
+
+#search-popup input {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+#search-popup .list-group-item {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#search-popup .list-group-item:hover {
+    background-color: #e3f2fd; /* Hover 효과 */
+}

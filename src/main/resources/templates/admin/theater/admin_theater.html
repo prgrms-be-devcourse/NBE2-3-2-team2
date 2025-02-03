@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 - 영화관</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+        }
+        nav h3 {
+            margin-top: 0;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 10px 0;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            color: #007BFF;
+        }
+        main {
+            margin-left: 220px;
+            flex: 1;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+        .btn {
+            padding: 5px 10px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #a71d2a;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f4f4f4;
+        }
+        table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+    <h1>영화관 목록</h1>
+    <h4>삭제 주의 : 영화관에 상영관이 존재할경우, 삭제되지 않습니다.</h4>
+    <a href="/admin/theater/post" class="btn">극장 추가</a>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>영화관 이름</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="theater : ${theaters}">
+            <td th:text="${theater.id}"></td>
+            <td th:text="${theater.theaterName}"></td>
+            <td>
+                <a th:href="@{/admin/theater/modify/{id}(id=${theater.id})}" class="btn">수정</a>
+            </td>
+            <td>
+                <form th:action="@{/admin/theater/delete/{id}(id=${theater.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">삭제</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${error}" style="color: red; font-weight: bold; margin-bottom: 10px;">
+        <p th:text="${error}"></p>
+    </div>
+</main>
+
+
+</body>
+</html>

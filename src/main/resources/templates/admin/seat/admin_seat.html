@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 - 좌석</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    nav {
+      width: 200px;
+      background-color: #f4f4f4;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+    }
+    nav h3 {
+      margin-top: 0;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 10px 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav ul li a:hover {
+      color: #007BFF;
+    }
+    main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 20px;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    .btn {
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    .btn-danger:hover {
+      background-color: #a71d2a;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    table th {
+      background-color: #f4f4f4;
+    }
+    table tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+  <h1>좌석관리</h1>
+  <h3>좌석을 관리할 상영관 목록</h3>
+  <table>
+    <thead>
+    <tr>
+      <th>상영관명</th>
+      <th>영화관명</th>
+      <th>좌석생성</th>
+      <th>좌석수정</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="screen : ${screens}">
+      <td th:text="${screen.screenName}"></td>
+      <td th:text="${screen.theater.theaterName}"></td>
+      <td>
+        <a th:href="@{/admin/seat/{id}(id=${screen.id})}" class="btn">생성</a>
+      </td>
+      <td>
+        <a th:href="@{/admin/seat/edit/{id}(id=${screen.id})}" class="btn">수정</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div th:if="${error}" style="color: red; font-weight: bold; margin-bottom: 10px;">
+    <p th:text="${error}"></p>
+  </div>
+</main>
+</body>
+</html>

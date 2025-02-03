@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 - 영화관</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+        }
+        nav h3 {
+            margin-top: 0;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 10px 0;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            color: #007BFF;
+        }
+        main {
+            margin-left: 220px;
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+    <h1>영화관 추가</h1>
+    <form action="/admin/theater/post" method="post">
+        <label for="theaterName">영화관 이름:</label>
+        <input type="text" id="theaterName" name="theaterName" required>
+        <button type="submit">추가</button>
+    </form>
+</main>
+</body>
+</html>

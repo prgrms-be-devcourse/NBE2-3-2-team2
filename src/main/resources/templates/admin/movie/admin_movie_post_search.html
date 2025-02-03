@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>관리자 - 영화추가</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+        }
+        nav h3 {
+            margin-top: 0;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 10px 0;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            color: #007BFF;
+        }
+        main {
+            margin-left: 220px;
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+    <h1>영화 추가</h1>
+    <h3>추가할 영화를 검색해서 조회해주세요.</h3>
+    <form th:action="@{/admin/movie/post/search}" method="get">
+        <label for="putmovieNm" style="font-weight: bold;">영화 이름:</label>
+        <input type="text" id="putmovieNm" name="putmovieNm" required>
+        <button type="submit">검색</button>
+    </form>
+    <form th:action="@{/admin/movie/post/add}" method="post" th:if="${movieDetails != null}">
+        <h3>영화 정보</h3>
+        <div th:if="${movieDetails['movieCode'] != null}">
+            <label for="movieCode" style="font-weight: bold;">영화 코드:</label>
+            <input type="text" id="movieCode" name="movieCode" th:value="${movieDetails['movieCode']}" readonly />
+        </div>
+        <div th:if="${movieDetails['movieName'] != null}">
+            <label for="movieName" style="font-weight: bold;">영화 이름:</label>
+            <input type="text" id="movieName" name="movieName" th:value="${movieDetails['movieName']}" readonly />
+        </div>
+        <div th:if="${movieDetails['openDate'] != null}">
+            <label for="openDate" style="font-weight: bold;">개봉일:</label>
+            <input type="text" id="openDate" name="openDate" th:value="${movieDetails['openDate']}" readonly />
+        </div>
+        <div th:if="${movieDetails['rating'] != null}">
+            <label for="rating" style="font-weight: bold;">심의 등급:</label>
+            <input type="text" id="rating" name="rating" th:value="${movieDetails['rating']}" readonly />
+        </div>
+        <div th:if="${movieDetails['genreName'] != null}">
+            <label for="genreName" style="font-weight: bold;">장르:</label>
+            <input type="text" id="genreName" name="genreName" th:value="${movieDetails['genreName']}" readonly />
+        </div>
+        <div th:if="${movieDetails['runtime'] != null}">
+            <label for="runtime" style="font-weight: bold;">상영 시간:</label>
+            <input type="text" id="runtime" name="runtime" th:value="${movieDetails['runtime']}" readonly />
+        </div>
+        <div th:if="${movieDetails['directorName'] != null}">
+            <label for="directorName" style="font-weight: bold;">감독:</label>
+            <input type="text" id="directorName" name="directorName" th:value="${movieDetails['directorName']}" readonly />
+        </div>
+        <div th:if="${movieDetails['companys'] != null}">
+            <label for="companys" style="font-weight: bold;"> 배급사:</label>
+            <input type="text" id="companys" name="companys" th:value="${movieDetails['companys']}" readonly />
+        </div>
+
+        <h3>추가 정보 입력</h3>
+        <label for="plot" style="font-weight: bold;">줄거리</label><br />
+        <textarea id="plot" name="plot" required style="width: 500px; height: 200px;"></textarea><br /><br />
+
+        <label for="posterImageUrl" style="font-weight: bold;">포스터 URL:</label>
+        <input type="text" id="posterImageUrl" name="posterImageUrl" required style="width: 400px;" /><br /><br />
+
+        <label for="stillImageUrl" style="font-weight: bold;">스틸 이미지 URL:</label>
+        <input type="text" id="stillImageUrl" name="stillImageUrl" required style="width: 400px;"/><br /><br />
+
+        <label for="status" style="font-weight: bold;">영화 분류:</label>
+        <select id="status" name="status" required>
+            <option value="SHOW">상영중</option>
+            <option value="PREV">상영예정</option>
+            <option value="RECOMMEND">추천영화</option>
+            <option value="END">상영종료</option>
+        </select><br /><br />
+
+        <button type="submit">저장</button><br />
+    </form>
+
+</main>
+
+</body>
+</html>

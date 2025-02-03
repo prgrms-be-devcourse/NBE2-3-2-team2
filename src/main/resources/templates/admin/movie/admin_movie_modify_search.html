@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>관리자 - 영화 수정</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+        }
+        nav h3 {
+            margin-top: 0;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 10px 0;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            color: #007BFF;
+        }
+        main {
+            margin-left: 220px;
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+    <h1>영화 수정</h1>
+    <h3>수정할 영화 ID를 입력하세요.</h3>
+    <form th:action="@{/admin/movie/modify/search}" method="get">
+        <label for="movieId" style="font-weight: bold;">영화 ID:</label>
+        <input type="number" id="movieId" name="movieId" required>
+        <button type="submit">조회</button>
+    </form>
+    <h3>검색할 영화 이름를 입력하세요.</h3>
+    <form th:action="@{/admin/movie/modify/idsearch}" method="get">
+        <label for="movieNm" style="font-weight: bold;">영화 이름:</label>
+        <input type="text" id="movieNm" name="movieNm" required>
+        <button type="submit">조회</button>
+    </form>
+    <form th:action="@{/admin/movie/modify/ok}" method="post" th:if="${movie != null}">
+        <h3>영화 정보 수정</h3>
+        <input type="hidden" name="id" th:value="${movie.id}" />
+
+        <label for="movieName" style="font-weight: bold;">영화 이름:</label>
+        <input type="text" id="movieName" name="movieName" th:value="${movie.movieName}" readonly /><br />
+
+        <label for="posterImageUrl" style="font-weight: bold;">포스터 URL:</label>
+        <input type="text" id="posterImageUrl" name="posterImageUrl" th:value="${movie.posterImageUrl}" required /><br />
+
+        <label for="stillImageUrl" style="font-weight: bold;">스틸 이미지 URL:</label>
+        <input type="text" id="stillImageUrl" name="stillImageUrl" th:value="${movie.stillImageUrl}" required /><br />
+
+        <label for="status" style="font-weight: bold;">영화 상태:</label>
+        <select id="status" name="status" required>
+            <option value="SHOW" th:selected="${movie.status == 'SHOW'}">상영중</option>
+            <option value="PREV" th:selected="${movie.status == 'PREV'}">상영예정</option>
+            <option value="RECOMMEND" th:selected="${movie.status == 'RECOMMEND'}">추천영화</option>
+            <option value="END" th:selected="${movie.status == 'END'}">상영종료</option>
+        </select><br /><br />
+
+        <button type="submit">수정</button>
+    </form>
+    <div th:if="${error != null}" style="color: red; font-weight: bold; margin-top: 20px;">
+        <p th:text="${error}"></p>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,10 @@
+.logo-img {
+    width: 150px;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .logo-img {
+        width: 120px; /* 작은 화면에서는 너비 축소 */
+    }
+}

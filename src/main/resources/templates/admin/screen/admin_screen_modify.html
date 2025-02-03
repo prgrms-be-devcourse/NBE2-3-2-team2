@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 - 상영관</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    nav {
+      width: 200px;
+      background-color: #f4f4f4;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+    }
+    nav h3 {
+      margin-top: 0;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 10px 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav ul li a:hover {
+      color: #007BFF;
+    }
+    main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+  <form action="/admin/screen/modify" method="post">
+    <input type="hidden" name="id" th:value="${screen.id}">
+
+    <label for="screenName">상영관 이름:</label>
+    <input type="text" id="screenName" name="screenName" th:value="${screen.screenName}" required>
+
+    <button type="submit">수정</button>
+  </form>
+</main>
+</body>
+</html>

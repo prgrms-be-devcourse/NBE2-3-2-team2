@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Showtimes</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:fragment="header" th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-5">
+  <h1 class="mb-4">상영 시간표</h1>
+  <table class="table table-striped">
+    <thead class="table-dark">
+    <tr>
+      <th>영화 이름</th>
+      <th>상영관 이름</th>
+      <th>총 좌석</th>
+      <th>예매 가능 좌석</th>
+      <th>상영 날짜</th>
+      <th>상영 시작 시간</th>
+      <th>예매</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 상영 정보 출력 -->
+    <tr th:each="showtime : ${showtime}">
+      <td th:text="${showtime.movieName}"></td>
+      <td th:text="${showtime.screenName}"></td>
+      <td th:text="${showtime.totalSeats}"></td>
+      <td th:text="${showtime.remainingSeats}"></td>
+      <td th:text="${showtime.showDate}"></td>
+      <td th:text="${showtime.startTime}"></td>
+      <td>
+        <!-- 예매 버튼 -->
+        <a th:href="@{/reservation(movieId=${showtime.movieId})}"
+           th:classappend="${showtime.remainingSeats == 0} ? 'disabled' : ''"
+           class="btn btn-success btn-sm"
+           th:text="${showtime.remainingSeats == 0} ? '예매불가' : '예매하기'"
+           th:attr="disabled=${showtime.remainingSeats == 0}"></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

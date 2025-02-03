@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Detail</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/movieCardDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/movieCardGradeIcon.css}">
+    <style>
+
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+
+        <!-- 영화 상세보기 카드 + 등급 -->
+        <div class="col-lg-10">
+            <div class="movie-detail-card">
+                <div class="row">
+                    <div class="col-md-4 text-center position-relative">
+<!--                        <div class="card h-100 position-relative">-->
+                        <!-- 등급 아이콘 -->
+                        <div class="rating-icon position-absolute top-0 end-0 mt-2 me-4 text-white fw-bold"
+                             th:switch="${movie.rating}">
+                            <span th:case="'12세이상관람가'" class="bg-warning rounded px-2 py-1">12</span>
+                            <span th:case="'15세이상관람가'" class="bg-orange rounded px-2 py-1">15</span>
+                            <span th:case="'19세이상관람가'" class="bg-danger rounded px-2 py-1">19</span>
+                            <span th:case="*" class="bg-success rounded px-2 py-1">ALL</span>
+                        </div>
+                        <img th:src="@{${movie.posterImageUrl}}" class="img-fluid poster-image" alt="포스터 이미지">
+<!--                        </div>-->
+                    </div>
+                    <div class="col-md-8">
+                        <h2 class="mb-3" th:text="${movie.movieName}">영화 제목</h2>
+                        <ul class="list-unstyled">
+                            <li><strong>등급:</strong> <span th:text="${movie.rating}"></span></li>
+                            <li><strong>러닝타임:</strong> <span th:text="${movie.runtime}"></span>분</li>
+                            <li><strong>장르:</strong> <span th:text="${movie.genreName}"></span></li>
+                            <li><strong>감독:</strong> <span th:text="${movie.directorName}"></span></li>
+                            <li><strong>제작사:</strong> <span th:text="${movie.companys}"></span></li>
+<!--                            <li><strong>개봉일:</strong> <span th:text="${movie.openDate}"></span></li>-->
+                            <!-- 20241224 -> 2024-12-24 로 변환-->
+                            <li><strong>개봉일:</strong>
+                                <span th:text="${#strings.substring(movie.openDate, 0, 4)} + '-' + ${#strings.substring(movie.openDate, 4, 6)} + '-' + ${#strings.substring(movie.openDate, 6)}"></span>
+                            </li>
+                            <li><strong>누적관객수:</strong> <span th:text="${movie.audiAcc}"></span>명</li>
+                            <li><strong>매출액:</strong> <span th:text="${movie.salesAcc}"></span></li>
+                        </ul>
+                        <hr>
+                        <p th:text="${movie.plot}" class="text-muted">줄거리</p>
+                        <div class="d-flex gap-3 mt-4">
+<!--                            <a th:href="${isLoggedIn} ? @{/private} : @{/}" class="btn btn-secondary btn-custom px-4">홈으로</a>-->
+                            <a th:if="${isLoggedIn}" th:href="@{/private}"
+                               class="btn btn-secondary btn-custom px-4">홈으로</a>
+                            <a th:unless="${isLoggedIn}" th:href="@{/}"
+                               class="btn btn-secondary btn-custom px-4">홈으로</a>
+                            <a th:if="${movie.status.name() != 'PREV'}"
+                               th:href="@{/reservation(movieId=${movie.id})}"
+                               class="btn btn-success btn-custom px-4">예매하기</a>
+                            <button th:if="${movie.status.name() == 'PREV'}"
+                                    class="btn btn-secondary btn-custom px-4"
+                                    disabled>개봉 예정</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 한줄 리뷰 & 기대평 -->
+        <div class="col-lg-10 mt-5 position-relative">
+            <div class="movie-detail-card">
+                <h3 class="card-header">한줄 리뷰 & 기대평</h3>
+                <br>
+                <div class="card-body">
+                    <div th:if="${#lists.isEmpty(reviews)}" class="text-center">
+                        <p class="text-muted">리뷰를 작성해 보세요!</p>
+                    </div>
+                    <div th:each="review : ${reviews}" class="mb-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <!-- 닉네임 및 별점 -->
+                            <div>
+                                <strong th:text="${review.nickname}"></strong>
+                                (<span style="color: #ffc107;" class="review-stars" th:text="'★'"></span><span th:text="${review.rating}"></span>)
+                                <p th:text="${review.content}" class="mb-0"></p>
+                            </div>
+                            <!-- 삭제 버튼 -->
+                            <!-- 닉네임 중복 x -->
+                            <div th:if="${review.nickname == userNickname}" class="d-flex align-items-center">
+                                <form action="/review/delete" method="post" class="d-flex align-items-center gap-2 position-relative">
+                                    <input type="hidden" name="reviewId" th:value="${review.id}">
+                                    <input type="hidden" name="movieId" th:value="${movie.id}">
+                                    <input type="hidden" name="password" th:value="${userPassword}">
+                                    <button type="submit" class="btn btn-danger btn-sm" style="font-size: 14px;">x</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-10 mt-5">
+            <div class="movie-detail-card">
+                <h3 class="card-header">리뷰 & 기대평 작성</h3>
+                <br>
+                <div class="card-body">
+                    <div th:if="${isLoggedIn}">
+                        <form action="/review/add" method="post" id="reviewForm">
+                            <input type="hidden" name="movieId" th:value="${movie.id}">
+                            <input type="hidden" name="nickname" th:value="${userNickname}">
+                            <input type="hidden" name="password" th:value="${userPassword}">
+
+                            <div class="mb-3">
+                                <label class="form-label">별점</label>
+                                <div class="star-rating" id="starRating">
+                                    <span class="star" data-value="1">★</span>
+                                    <span class="star" data-value="2">★</span>
+                                    <span class="star" data-value="3">★</span>
+                                    <span class="star" data-value="4">★</span>
+                                    <span class="star" data-value="5">★</span>
+                                </div>
+                                <input type="hidden" id="rating" name="rating" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="content" class="form-label">리뷰 내용</label>
+                                <textarea class="form-control" id="content" name="content" rows="3" maxlength="100" required></textarea>
+                                <small class="text-muted" id="contentCounter">0/100</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">작성</button>
+                        </form>
+                    </div>
+                    <div th:unless="${isLoggedIn}" class="text-center">
+                        <p class="text-muted">로그인 후 리뷰를 작성할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating');
+        const contentInput = document.getElementById('content');
+        const contentCounter = document.getElementById('contentCounter');
+
+        // 별점 설정
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const value = parseInt(star.getAttribute('data-value'));
+                stars.forEach((s, i) => s.classList.toggle('selected', i < value));
+                ratingInput.value = value;
+            });
+        });
+
+        // 글자 수 업데이트
+        contentInput.addEventListener('input', () => {
+            const length = contentInput.value.length;
+            contentCounter.textContent = `${length}/100`;
+        });
+    });
+</script>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

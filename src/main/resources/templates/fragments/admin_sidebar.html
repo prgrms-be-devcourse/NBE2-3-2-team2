@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <style>
+    nav {
+      width: 200px;
+      background-color: #f4f4f4;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+    }
+
+    nav h3 {
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    nav ul li {
+      margin: 10px 0;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      display: block;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #ddd;
+      color: #000;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+<div th:fragment="sidebar">
+  <nav>
+    <h3>LetMovie Admin</h3>
+    <ul>
+      <li><a th:href="@{/admin/movie?page=1}">상영중인 영화</a></li>
+      <li><a th:href="@{/admin/movie/post}">영화 추가</a></li>
+      <li><a th:href="@{/admin/movie/modify}">영화 정보 수정</a></li>
+      <li><a th:href="@{/admin/movie/delete}">영화 삭제</a></li>
+      <hr class="divider">
+      <li><a th:href="@{/admin/theater}">영화관</a></li>
+      <li><a th:href="@{/admin/screen}">상영관</a></li>
+      <li><a th:href="@{/admin/seat}">좌석</a></li>
+      <li><a th:href="@{/admin/showtime}">상영시간대</a></li>
+      <hr class="divider">
+      <li><a th:href="@{/admin/member}">회원 관리</a></li>
+      <li><a th:href="@{/admin/payment}">회원 결제 관리</a></li>
+    </ul>
+  </nav>
+</div>
+</body>
+</html>

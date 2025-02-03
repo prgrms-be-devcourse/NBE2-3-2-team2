@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 내역</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .payment-container {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            margin: 20px auto;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 40px;
+        }
+
+        .payment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .payment-item {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .payment-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background-color: #e6f7f6;
+            color: #1ec800;
+        }
+
+        .status-failed {
+            background-color: #fff5f5;
+            color: #e03131;
+        }
+
+        .status-canceled {
+            background-color: #e9ecef;
+            color: #868e96;
+        }
+
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .payment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .detail-label {
+            color: #868e96;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1ec800;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #868e96;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .home-button {
+            display: inline-block;
+            background-color: #1ec800;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .home-button:hover {
+            background-color: #19b200;
+        }
+
+        .cancel-button {
+            background-color: #e03131;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .cancel-button:hover {
+            background-color: #c92a2a;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .payment-container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .page-title {
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="payment-container">
+    <input type="hidden" id="memberId" th:value="${member.id}">
+
+    <h1 class="page-title">나의 결제 내역</h1>
+    <div id="payment-list" class="payment-list">
+    </div>
+    <div class="button-container">
+        <a th:if="${isLoggedIn}" th:href="@{/private}" class="home-button">홈으로</a>
+        <a th:unless="${isLoggedIn}" th:href="@{/}" class="home-button">홈으로</a>
+    </div>
+</div>
+
+<script>
+    const formatDateTime = (dateTimeStr) => {
+        const date = new Date(dateTimeStr);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const memberId = document.getElementById('memberId').value;
+
+        try {
+            const response = await fetch(`/api/v1/payment/my-payments?member_id=${memberId}`);
+            if (!response.ok) throw new Error('결제 내역을 불러오는데 실패했습니다.');
+
+            const data = await response.json();
+            const paymentList = document.getElementById('payment-list');
+
+            if (data.length === 0) {
+                paymentList.innerHTML = '<div class="empty-message">결제 내역이 없습니다.</div>';
+                return;
+            }
+
+            paymentList.innerHTML = data.map(payment => {
+                const getStatusClass = (status) => {
+                    switch(status) {
+                        case 'PAYMENT_SUCCESS': return 'status-success';
+                        case 'PAYMENT_FAILED': return 'status-failed';
+                        case 'PAYMENT_CANCELED': return 'status-canceled';
+                        default: return '';
+                    }
+                };
+
+                const getStatusText = (status) => {
+                    switch(status) {
+                        case 'PAYMENT_SUCCESS': return '결제완료';
+                        case 'PAYMENT_FAILED': return '결제실패';
+                        case 'PAYMENT_CANCELED': return '결제취소';
+                        default: return status;
+                    }
+                };
+
+                return `
+                    <div class="payment-item">
+                        <div class="payment-header">
+                            <span class="payment-status ${getStatusClass(payment.paymentStatus)}">
+                                ${getStatusText(payment.paymentStatus)}
+                            </span>
+                            <span class="amount">${payment.amount.toLocaleString()}원</span>
+                        </div>
+                        <div class="payment-details">
+                            <div class="detail-row">
+                                <span class="detail-label">결제 번호</span>
+                                <span class="detail-value">${payment.paymentId}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">예매 번호</span>
+                                <span class="detail-value">${payment.reservationId}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">영화명</span>
+                                <span class="detail-value">${payment.nickName}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">결제 시간</span>
+                                <span class="detail-value">${formatDateTime(payment.paidAt)}</span>
+                            </div>
+                            ${payment.paymentStatus === 'PAYMENT_SUCCESS' ? `
+                            <div class="detail-row" style="border-bottom: none; justify-content: flex-end;">
+                                <button onclick="cancelPayment(${payment.paymentId})" class="cancel-button">결제 취소</button>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('payment-list').innerHTML =
+                '<div class="empty-message">결제 내역을 불러오는데 실패했습니다. 다시 시도해 주세요.</div>';
+        }
+    });
+
+    async function cancelPayment(paymentId) {
+        if (!confirm('결제를 취소하시겠습니까?')) return;
+
+        try {
+            const response = await fetch(`/api/v1/payment/cancel?payment_id=${paymentId}`, {
+                method: 'POST',
+            });
+
+            if (!response.ok) {
+                throw new Error('결제 취소에 실패했습니다.');
+            }
+
+            const result = await response.json();
+            alert('결제가 취소되었습니다.');
+            // 페이지 새로고침하여 최신 결제 내역 표시
+            window.location.reload();
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('결제 취소 중 오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+    }
+</script>
+</body>
+</html>
+<!DOCTYPE html>

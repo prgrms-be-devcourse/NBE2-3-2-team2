@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 - 상영시간대</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    nav {
+      width: 200px;
+      background-color: #f4f4f4;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+    }
+    nav h3 {
+      margin-top: 0;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 10px 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav ul li a:hover {
+      color: #007BFF;
+    }
+    main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+  <h1>상영시간대 추가</h1>
+  <form action="/admin/showtime/add" method="post">
+    <label for="screenId" style="font-weight: bold;">상영관:</label>
+    <select id="screenId" name="screenId" required>
+      <option th:each="screen : ${screens}"
+              th:value="${screen.id}"
+              th:text="${screen.screenName + ' (' + screen.id + ')'}">
+      </option>
+    </select>
+    <br />
+    <br />
+    <label for="movieId" style="font-weight: bold;">영화:</label>
+    <select id="movieId" name="movieId" required>
+      <option th:each="movie : ${movies}" th:value="${movie.id}" th:text="${movie.movieName}"></option>
+    </select>
+    <br />
+    <br />
+    <label for="showtimeDate" style="font-weight: bold;">날짜:</label>
+    <input type="date" id="showtimeDate" name="showtimeDate" required>
+    <br />
+    <br />
+    <label for="showtimeTime" style="font-weight: bold;">시간:</label>
+    <input type="time" id="showtimeTime" name="showtimeTime" required>
+    <br />
+    <br />
+    <button type="submit" class="btn btn-primary">추가</button>
+  </form>
+</main>
+</body>
+</html>

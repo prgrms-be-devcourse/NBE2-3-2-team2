@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 - 영화 정보 삭제</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+        }
+        nav h3 {
+            margin-top: 0;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 10px 0;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            color: #007BFF;
+        }
+        main {
+            margin-left: 220px;
+            flex: 1;
+            padding: 20px;
+        }
+        .poster-img {
+            max-width: 200px;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-group button,
+        .button-group a {
+            padding: 10px 20px;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .delete-button {
+            color: white;
+            background-color: red;
+        }
+
+        .cancel-button {
+            color: white;
+            background-color: gray;
+            text-align: center;
+        }
+
+        .cancel-button:hover {
+            background-color: darkgray;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+    <h1>영화 삭제 확인</h1>
+    <h3>다음 영화를 삭제하시겠습니까?</h3>
+
+    <div>
+        <p><img class="poster-img" th:src="${movie.posterImageUrl}" alt="포스터 이미지"></p>
+        <p><strong>영화 코드:</strong> <span th:text="${movie.movieCode}"></span></p>
+        <p><strong>영화 이름:</strong> <span th:text="${movie.movieName}"></span></p>
+    </div>
+
+    <div class="button-group">
+        <form th:action="@{/admin/movie/delete/ok}" method="post" style="display: inline;">
+            <input type="hidden" name="movieId" th:value="${movie.id}">
+            <button type="submit" class="delete-button">삭제</button>
+        </form>
+
+        <a href="/admin/movie/delete" class="cancel-button">취소</a>
+    </div>
+</main>
+</body>
+</html>

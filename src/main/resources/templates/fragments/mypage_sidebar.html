@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지 사이드바</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/mypage_sidebar.css}">
+
+    <style>
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div th:fragment="sidebar">
+        <nav class="sidebar">
+            <div>
+                <a class="navbar-brand" th:href="@{/private}">
+                    <img th:src="@{/images/letmovielogo6.png}" alt="LetMovie" style="width: 200px; height: auto;">
+                </a>
+            </div>
+            <ul style="list-style-type: none; padding: 10px;">
+                <li><h3>나의 예매/결제 내역</h3></li>
+                <li><a th:href="@{/mypage/reservationdetails}" style="text-decoration: none; color: #333; font-weight: bold; margin-bottom: 1px;">예매내역 조회</a></li>
+                <li><a th:href="@{/mypage/paymentdetails}" style="text-decoration: none; color: #333; font-weight: bold; margin-bottom: 1px;">결제내역 조회</a></li>
+                <li><h3>회원정보</h3></li>
+                <li><a th:href="@{/mypage/changepassword}" style="text-decoration: none; color: #333; font-weight: bold;">비밀번호 변경</a></li>
+                <!--<li><h3>이벤트 정보</h3></li>
+                <li><a th:href="@{/mypage/eventinfo}" style="text-decoration: none; color: #333; font-weight: bold;">진행 중인 이벤트</a></li>
+                <li><h3>멤버십 포인트</h3></li>
+                <li><a th:href="@{/mypage/membership}" style="text-decoration: none; color: #333; font-weight: bold;">포인트 이용내역</a></li>-->
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>

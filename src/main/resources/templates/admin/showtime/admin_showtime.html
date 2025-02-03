@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 - 상영시간대</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    nav {
+      width: 200px;
+      background-color: #f4f4f4;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+    }
+    nav h3 {
+      margin-top: 0;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 10px 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav ul li a:hover {
+      color: #007BFF;
+    }
+    main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 20px;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    .btn {
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    .btn-danger:hover {
+      background-color: #a71d2a;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    table th {
+      background-color: #f4f4f4;
+    }
+    table tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+  <h1>상영시간대</h1>
+  <h4>삭제 주의 : 해당 상영 일정에 예매내역이 있을 경우, 삭제되지 않습니다.</h4>
+  <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+  <a href="/admin/showtime/add" class="btn">상영시간대 추가</a>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>상영관명</th>
+      <th>영화명</th>
+      <th>상영날짜</th>
+      <th>상영시간</th>
+      <th>총 좌석</th>
+      <th>잔여 좌석</th>
+      <th>삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="showtime : ${showtimes}">
+      <td th:text="${showtime.id}"></td>
+      <td th:text="${screenNames[showtime.screen.id]} + '(' + ${showtime.screen.id} + ')'"></td>
+      <td th:text="${movieNames[showtime.movie.id]}"></td>
+      <td th:text="${showtime.showtimeDate}"></td>
+      <td th:text="${showtime.showtimeTime}"></td>
+      <td th:text="${showtime.totalSeats}"></td>
+      <td th:text="${showtime.remainingSeats}"></td>
+      <td>
+        <a th:href="@{/admin/showtime/delete/{id}(id=${showtime.id})}" class="btn btn-danger" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+
+
+</body>
+</html>

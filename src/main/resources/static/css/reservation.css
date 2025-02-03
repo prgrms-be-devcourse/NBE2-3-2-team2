@@ -1,0 +1,156 @@
+/* 전체 컨테이너 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container-reservation {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 제목 스타일 */
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* 날짜 선택 리스트 스타일 */
+.date-container {
+    margin-bottom: 20px;
+}
+
+/* 날짜 선택 리스트 스타일 */
+#date-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.date-item {
+    flex: 1;
+    text-align: center;
+}
+
+/* input[type=radio]는 보이지 않도록 설정 */
+.date-item input {
+    display: none;
+}
+
+/* 라벨 기본 스타일 */
+.date-item label {
+    display: block;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* 라벨 선택 시 (input이 checked 상태일 때) 스타일 변경 */
+.date-item input:checked + label {
+    background-color: #007bff; /* 선택된 색상 */
+    color: white;
+    border-color: #007bff;
+}
+
+
+/* 폼 스타일 */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+/* select와 option의 기본 스타일 지정 */
+/*select {*/
+/*    color: black; !* 글자색을 검은색으로 지정 *!*/
+/*    background-color: white; !* 배경색을 흰색으로 지정 *!*/
+/*    border: 1px solid #ccc;*/
+/*    padding: 5px;*/
+/*    font-size: 14px;*/
+/*}*/
+
+option {
+    color: black; /* 옵션 글자색 */
+    background-color: white; /* 옵션 배경색 */
+}
+
+/*
+추가
+ */
+
+.info-lists {
+    display: flex;           /* 가로 나열 */
+    gap: 20px;               /* 블록 간 간격 */
+    justify-content: space-around; /* 혹은 flex-start, center 등등 원하는 대로 */
+    margin-bottom: 20px;
+}
+
+.info-block {
+    flex: 1;            /* 세 블록을 균등 너비로 */
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+}
+.info-block h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.info-block ul {
+    list-style: none;
+    padding: 10px; /* 리스트 내부 여백 추가 */
+    margin: 0;
+}
+
+.info-block li {
+    margin-bottom: 8px; /* 리스트 아이템 간격 조정 */
+    padding: 12px; /* 리스트 아이템 크기 키우기 */
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px; /* 텍스트 크기 증가 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.info-block li:hover {
+    /*background-color: #f1f1f1; !* Hover 효과 *!*/
+    border-color: #bbb; /* Hover 시 테두리 색상 변경 */
+}
+
+.selected {
+    background-color: #d819bf; /* 파란색 배경 */
+    color: white;             /* 글자색 흰색 */
+}

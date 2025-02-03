@@ -1,0 +1,95 @@
+html,body {
+    height: 100%;
+}
+
+body.my-login-page {
+    background-color: #f7f9fb;
+    font-size: 14px;
+}
+
+.my-login-page .brand {
+    width: 280px;
+    height: 150px;
+    overflow: hidden;
+    margin: 20px auto;
+    position: relative;
+}
+
+/*.my-login-page .brand img {
+    width: 60%;
+    display: block; !* 이미지 요소를 블록 요소로 설정 *!
+    margin: auto; !* 상하좌우 여백을 자동으로 설정하여 중앙 정렬 *!
+    position: relative; !* 위치 속성을 상대적으로 설정 *!
+    top: 50%; !* 부모 요소의 50% 아래로 이동 *!
+    transform: translateY(-50%); !* 자신의 높이의 50%만큼 위로 이동 *!
+}*/
+
+.my-login-page .card-wrapper {
+    width: 400px;
+}
+
+.my-login-page .card-wrapper img {
+    width: 70%;
+    display: block;
+    margin: auto;
+    padding: 20px;
+}
+
+.my-login-page .card {
+    border-color: transparent;
+    box-shadow: 0 4px 8px rgba(0,0,0,.05);
+}
+
+.my-login-page .card.fat {
+    padding: 10px;
+}
+
+.my-login-page .card .card-title {
+    margin-bottom: 30px;
+}
+
+.my-login-page .form-control {
+    border-width: 2.3px;
+}
+
+.my-login-page .form-group label {
+    width: 100%;
+}
+
+/*.my-login-page .form-group-email {
+	width: 100%;
+	height: 115px;
+}*/
+
+.my-login-page .btn.btn-block {
+    padding: 12px 10px;
+}
+
+.my-login-page .footer {
+    margin: 40px 0;
+    color: #888;
+    text-align: center;
+}
+
+.inner-btn {
+    margin-top: 2px;          /* Adds space between the input and the button */
+    float: right;             /* Aligns the button to the right */
+    display: inline-block;    /* Ensures it behaves as a button */
+}
+
+@media screen and (max-width: 425px) {
+    .my-login-page .card-wrapper {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .my-login-page .card.fat {
+        padding: 0;
+    }
+
+    .my-login-page .card.fat .card-body {
+        padding: 15px;
+    }
+}

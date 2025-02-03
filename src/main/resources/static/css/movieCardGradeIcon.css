@@ -1,0 +1,27 @@
+.rating-icon {
+    font-size: 1rem; /* 글자 크기 */
+    border-radius: 10px; /* 모서리 둥글기 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    line-height: 1.5; /* 높이 조정 */
+    width: 2.5rem; /* 아이콘 가로 크기 */
+    height: 2.5rem; /* 아이콘 세로 크기 */
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: center; /* 가로 중앙 정렬 */
+}
+
+.bg-warning {
+    background-color: #ffc107; /* 노란색 배경 */
+}
+
+.bg-orange {
+    background-color: #fd7e14; /* 주황색 배경 */
+}
+
+.bg-danger {
+    background-color: #dc3545; /* 빨간색 배경 */
+}
+
+.bg-success {
+    background-color: #28a745; /* 초록색 배경 */
+}

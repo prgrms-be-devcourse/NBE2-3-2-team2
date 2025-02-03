@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 - 상영관</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    nav {
+      width: 200px;
+      background-color: #f4f4f4;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+    }
+    nav h3 {
+      margin-top: 0;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 10px 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav ul li a:hover {
+      color: #007BFF;
+    }
+    main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+    .btn {
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    .btn-danger:hover {
+      background-color: #a71d2a;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    table th {
+      background-color: #f4f4f4;
+    }
+    table tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+  <h1>상영관</h1>
+  <section>
+    <h1>상영관 목록</h1>
+    <h4>삭제 주의 : 상영관에 좌석이 존재할경우, 삭제되지 않습니다.</h4>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>상영관명</th>
+        <th>영화관명</th>
+        <th>수정</th>
+        <th>삭제</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="screen : ${screens}">
+        <td th:text="${screen.id}"></td>
+        <td th:text="${screen.screenName}"></td>
+        <td th:text="${screen.theater.theaterName}"></td>
+        <td>
+          <a th:href="@{'/admin/screen/modify?id=' + ${screen.id}}" class="btn">수정</a>
+        </td>
+        <td>
+          <form action="/admin/screen/delete" method="post" style="display: inline;">
+            <input type="hidden" name="id" th:value="${screen.id}">
+            <button type="submit" class="btn btn-danger">삭제</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <br />
+  <section>
+    <h1>상영관 추가</h1>
+    <form action="/admin/screen/add" method="post">
+      <label for="screenName">상영관명:</label>
+      <input type="text" id="screenName" name="screenName" required>
+
+      <label for="theaterId">영화관:</label>
+      <select id="theaterId" name="theaterId" required>
+        <option value="" disabled selected>영화관 선택</option>
+        <option th:each="theater : ${theaters}" th:value="${theater.id}" th:text="${theater.theaterName}"></option>
+      </select>
+
+      <button type="submit">추가</button>
+    </form>
+  </section>
+
+  <div>
+    <p th:if="${success}" th:text="${success}" class="success"></p>
+    <p th:if="${error}" th:text="${error}" class="error"></p>
+  </div>
+</main>
+</body>
+</html>

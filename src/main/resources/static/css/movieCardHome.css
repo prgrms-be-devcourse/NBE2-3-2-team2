@@ -1,0 +1,157 @@
+/* 캐러셀 버튼 스타일 */
+.carousel-btn {
+    font-size: 2rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#prev-btn-show, #prev-btn-prev {
+    left: 0; /* 왼쪽 끝에 배치 */
+}
+
+#next-btn-show, #next-btn-prev {
+    right: 0; /* 오른쪽 끝에 배치 */
+}
+
+/* 왼쪽 버튼 */
+#prev-btn-feature, #prev-btn-show, #prev-btn-prev {
+    left: -25px; /* 부모 컨테이너의 왼쪽 끝으로 밀기 */
+}
+
+/* 오른쪽 버튼 */
+#next-btn-feature, #next-btn-show, #next-btn-prev {
+    right: -25px; /* 부모 컨테이너의 오른쪽 끝으로 밀기 */
+}
+
+/* 추천 영화 카드의 부모 요소에 상대적 위치 지정 */
+#featured-movie-container,
+#show-movie-container,
+#prev-movie-container {
+    position: relative; /* 버튼이 이 요소를 기준으로 위치 설정됨 */
+}
+
+/* 헤더 스타일 */
+.navbar {
+    margin-bottom: 30px;
+}
+.navbar-brand img {
+    height: 40px;
+}
+
+/* 영화 카드 이미지 크기 고정 */
+.card-img-top {
+    object-fit: cover; /* 이미지 비율 유지하며 잘라냄 */
+    width: 100%; /* 카드의 가로 너비에 맞춤 */
+    height: 300px; /* 일정한 높이 지정 */
+    border-radius: 8px; /* 모서리를 약간 둥글게 */
+}
+
+/* 카드 간격 설정 */
+.col-md-3 {
+    padding: 10px; /* 카드 사이의 간격 추가 */
+}
+
+/* 카드의 부모 요소에서 마진 제거 */
+.carousel-wrapper, .row {
+    margin: 0; /* 기본 마진 제거 */
+}
+
+/* 카드 스타일 */
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+    border-radius: 8px; /* 카드 모서리를 둥글게 */
+    overflow: hidden; /* 내용이 카드 경계 밖으로 나가지 않게 */
+    transition: transform 0.3s ease; /* hover 효과 */
+}
+
+.card:hover {
+    transform: scale(1.05); /* 마우스 오버 시 약간 확대 */
+}
+
+/* 추천 영화 카드의 hover 효과 비활성화 */
+#featured-movie-container .card {
+    transform: none !important;
+}
+
+/* 박스오피스와 상영 예정 영화 카드 이미지 크기 */
+#show-movie-container .card-img-top,
+#prev-movie-container .card-img-top {
+    height: 480px;
+}
+
+/* 추천 영화 카드 이미지 크기 */
+#featured-movie-container .card-img-top {
+    height: 700px;
+}
+
+/* 애니메이션 관련 css */
+.carousel-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* 부드러운 슬라이드 효과 */
+}
+
+.col-md-3 {
+    flex: 0 0 25%; /* 한 번에 4개씩 보이도록 설정 */
+}
+
+/* 애니메이션 관련 css - 영화 추천 섹션 */
+#featured-movie-wrapper {
+    overflow: hidden; /* 컨테이너 바깥 요소 숨김 */
+    position: relative;
+    width: 100%;
+}
+
+#featured-movie-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* 부드러운 슬라이드 효과 */
+}
+
+/* 영화 카드의 일정한 레이아웃을 위해 */
+.card-body {
+    display: flex;
+    flex-direction: column; /* 세로 방향 배치 */
+    justify-content: space-between; /* 상단과 하단 정렬 */
+    height: 100%; /* 카드 높이 채우기 */
+}
+
+.card-title {
+    min-height: 3rem; /* 제목 영역 최소 높이 설정 */
+    line-height: 1.2; /* 줄 간격 조정 */
+    overflow: hidden; /* 텍스트 넘칠 경우 숨기기 */
+    text-overflow: ellipsis; /* 텍스트 넘칠 경우 말줄임표 추가 */
+    white-space: normal; /* 텍스트 줄 바꿈 허용 */
+}
+
+.card-body .btn {
+    margin-top: auto; /* 버튼을 아래로 정렬 */
+}
+
+/* 관리자 버튼 */
+#invisible-button {
+    position: absolute;
+    top: 10px; /* 상단에서 10px 떨어짐 */
+    right: 10px; /* 오른쪽 끝에서 10px 떨어짐 */
+    opacity: 0; /* 버튼 숨김 */
+    width: 20px;
+    height: 10px;
+    pointer-events: all; /* 클릭 가능 설정 */
+    z-index: 999; /* 최상단 위치 */
+}

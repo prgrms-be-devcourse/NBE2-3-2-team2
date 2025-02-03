@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <style>
+    </style>
+</head>
+<body>
+<!-- 공통 슬라이더 추가 -->
+<div th:replace="~{fragments/mypage_sidebar :: sidebar}"></div>
+<main>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <img th:if="${member.getGrade()} == 'GENERAL'"
+                     th:src="@{/images/membership_general.png}" alt="General Membership Image" />
+                <img th:if="${member.getGrade()} == 'VIP'"
+                     th:src="@{/images/membership_vip.png}" alt="VIP Membership Image" />
+                <h1>환영합니다, <br><span th:text="${member.getNickname()}"></span>님!</h1>
+            </div>
+            <p>현재 등급 <span th:text="${member.getGrade()}"></span> </p>
+            <p>이메일: <span th:text="${member.getEmail()}"></span></p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

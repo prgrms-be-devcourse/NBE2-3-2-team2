@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<div th:fragment="header">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/search.css}">
+    <!-- 네비게이션 바 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" th:if="${isLoggedIn}" th:href="@{/private}">
+                <img th:src="@{/images/letmovielogo6.png}" alt="LetMovie" style="width: 150px; height: auto;">
+            </a>
+            <a class="navbar-brand" th:unless="${isLoggedIn}" th:href="@{/}">
+                <img th:src="@{/images/letmovielogo6.png}" alt="LetMovie" style="width: 150px; height: auto;">
+            </a>
+            <!-- 토글 버튼 (반응형) -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- 메뉴 -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:if="${isLoggedIn}" th:href="@{/private/movies(category=ALL)}">영화</a>
+                        <a class="nav-link" th:unless="${isLoggedIn}" th:href="@{/movies(category=ALL)}">영화</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/reservation}">예매</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:if="${isLoggedIn}" th:href="@{/private/movie/showtime}">상영시간</a>
+                        <a class="nav-link" th:unless="${isLoggedIn}" th:href="@{/movie/showtime}">상영시간</a>
+                    </li>
+                    <!-- 검색 아이콘 -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="search-icon">
+                            <i class="bi bi-search"></i>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" th:unless="${isLoggedIn}">
+                        <a class="nav-link" th:href="@{/login}">로그인</a>
+                    </li>
+                    <li class="nav-item" th:unless="${isLoggedIn}">
+                        <a class="nav-link" th:href="@{/signup}">회원가입</a>
+                    </li>
+
+                    <!-- 로그인 상태 -->
+                    <li class="nav-item" th:if="${isLoggedIn}">
+                        <span class="nav-link">안녕하세요, <span th:text="${userNickname}">사용자</span>님!</span>
+                    </li>
+                    <li class="nav-item" th:if="${isLoggedIn}">
+                        <form action="/logout" method="POST" style="display: inline;">
+                            <a href="#" class="nav-link" onclick="this.closest('form').submit(); return false;">로그아웃</a>
+                        </form>
+                    </li>
+                    <li class="nav-item" th:if="${isLoggedIn}">
+                        <a class="nav-link" th:href="@{/mypage}">마이페이지</a>
+                    </li>
+                    <li class="nav-item" th:if="${isLoggedIn}">
+                        <a class="nav-link" th:href="@{/payment/paymentlist}">결제내역조회</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 검색 팝업 -->
+    <div id="search-popup" class="d-none">
+        <div class="container py-3">
+            <div class="bg-light shadow rounded p-4">
+                <button id="close-search" class="btn btn-close float-end"></button>
+                <h5 class="mb-3">영화 검색</h5>
+                <form th:action="${isLoggedIn} ? '/private/movies' : '/movies'" method="get" id="search-form">
+                    <!-- Input group으로 검색창과 버튼을 묶음 -->
+                    <div class="input-group">
+                        <input type="text" name="query" id="search-input" class="form-control"
+                               placeholder="검색어를 입력하세요" required>
+                        &nbsp;
+                        <button type="submit" class="btn btn-primary">검색</button>
+                    </div>
+                </form>
+                <ul id="search-suggestions" class="list-group mt-3"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        const isLoggedIn = /*[[${isLoggedIn}]]*/ false; // 로그인 여부를 나타내는 방식
+    </script>
+    <script th:src="@{/js/searchPopUp.js}"></script>
+    <!--로그아웃 시 동작처리-->
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            const logoutLink = document.getElementById('logoutLink');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function (event) {
+                    event.preventDefault(); // 기본 동작 방지
+                    try {
+                        // CSRF 토큰과 헤더 가져오기
+                        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                        // POST 요청으로 로그아웃 처리
+                        const response = fetch('/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                [csrfHeader]: csrfToken // CSRF 토큰 추가
+                            },
+                            body: new URLSearchParams() // 로그아웃 시 추가 데이터 필요 없음
+                        });
+                        if (response.ok) {
+                            window.location.href = '/login'; // 로그아웃 성공 후 리다이렉트
+                        } else {
+                            alert('로그아웃 실패. 다시 시도해 주세요.');
+                        }
+                    } catch (error) {
+                        console.error('로그아웃 중 오류 발생:', error);
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+</body>
+</html>

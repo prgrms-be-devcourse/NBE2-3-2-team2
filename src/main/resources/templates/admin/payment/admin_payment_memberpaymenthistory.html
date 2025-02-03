@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 - 회원결제관리</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    nav {
+      width: 200px;
+      background-color: #f4f4f4;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+    }
+    nav h3 {
+      margin-top: 0;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 10px 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav ul li a:hover {
+      color: #007BFF;
+    }
+    main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+  <h1>회원 결제 내역</h1>
+  <table border="1">
+    <thead>
+    <tr>
+      <th>결제 ID</th>
+      <th>회원 ID</th>
+      <th>예매 영화명</th>
+      <th>결제 금액</th>
+      <th>결제 수단</th>
+      <th>결제 요청 시각</th>
+      <th>결제 승인 시각</th>
+      <th>에러 코드</th>
+      <th>에러 메시지</th>
+      <th>paymentStatus</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="payment : ${paymentHistories}">
+      <td th:text="${payment.id}"></td>
+      <td th:text="${payment.partnerUserId}"></td>
+      <td th:text="${payment.itemName}"></td>
+      <td th:text="${payment.amount}"></td>
+      <td th:text="${payment.paymentMethodType}"></td>
+      <td th:text="${payment.createdAt}"></td>
+      <td th:text="${payment.approvedAt}"></td>
+      <td th:text="${payment.errorCode}"></td>
+      <td th:text="${payment.errorMessage}"></td>
+      <td th:text="${payment.paymentStatus}"></td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+</body>
+</html>

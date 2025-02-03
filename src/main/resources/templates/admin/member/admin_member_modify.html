@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 - 회원관리</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    nav {
+      width: 200px;
+      background-color: #f4f4f4;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+    }
+    nav h3 {
+      margin-top: 0;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 10px 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav ul li a:hover {
+      color: #007BFF;
+    }
+    main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+
+<main>
+  <h1>회원 관리</h1>
+  <h2>회원 검색</h2>
+  <form th:action="@{/admin/member/search}" method="get">
+    <label for="inputnickname">닉네임:</label>
+    <input type="text" id="inputnickname" name="inputnickname" placeholder="닉네임 입력">
+    <button type="submit">검색</button>
+  </form>
+
+  <h2>회원 수정</h2>
+  <form th:action="@{/admin/member/modify}" method="get">
+    <label for="id">ID:</label>
+    <input type="text" id="id" name="id" placeholder="ID 입력">
+    <button type="submit">검색</button>
+  </form>
+
+  <h3>정보 입력</h3>
+  <form th:action="@{/admin/member/modify/ok}" method="post" th:if="${member != null}">
+    <input type="hidden" name="id" th:value="${member.id}" />
+
+    <label for="nickname">닉네임:</label>
+    <input type="text" id="nickname" name="nickname" th:value="${member.nickname}" required><br />
+
+    <label for="email">이메일:</label>
+    <input type="email" id="email" name="email" th:value="${member.email}" disabled><br />
+
+    <label for="grade">등급:</label>
+    <select id="grade" name="grade" required>
+      <option value="GENERAL" th:selected="${member.grade == 'GENERAL'}">GENERAL</option>
+      <option value="VIP" th:selected="${member.grade == 'VIP'}">VIP</option>
+    </select><br />
+
+    <label for="memberStatus">상태:</label>
+    <select id="memberStatus" name="memberStatus" required>
+      <option value="AVAILABLE" th:selected="${member.memberStatus == 'AVAILABLE'}">AVAILABLE</option>
+      <option value="SLEEPING" th:selected="${member.memberStatus == 'SLEEPING'}">SLEEPING</option>
+      <option value="SUSPENDED" th:selected="${member.memberStatus == 'SUSPENDED'}">SUSPENDED</option>
+    </select><br /><br />
+
+    <button type="submit">수정</button>
+  </form>
+</main>
+
+</body>
+</html>

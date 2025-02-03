@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LetMovie</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/movieCardHome.css}">
+    <link rel="stylesheet" th:href="@{/css/movieCardGradeIcon.css}">
+    <style>
+
+    </style>
+</head>
+<body>
+<!-- 공통 헤더 추가 -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-5">
+
+    <div class="position-relative mb-5">
+        <button th:if="${isLoggedIn == null or !isLoggedIn}" id="invisible-button" class="btn btn-outline-primary">hidden</button>
+        <!-- 제목 -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>추천 영화</h1>
+        </div>
+        <!-- 캐러셀 버튼 -->
+        <button id="prev-btn-feature" class="carousel-btn">&lt;</button>
+
+        <!-- 추천 영화 카드 -->
+        <div class="position-relative overflow-hidden" id="featured-movie-wrapper">
+            <div id="featured-movie-container" class="d-flex">
+                <div class="card w-100"
+                     th:each="movie : ${recommendMovies}"
+                     th:if="${movie.status.name() == 'RECOMMEND'}">
+                    <div class="position-relative">
+                        <!-- 스틸 이미지 -->
+                        <img th:src="@{${movie.stillImageUrl}}" class="card-img-top" alt="스틸 이미지">
+
+                        <!-- 영화 이름 -->
+                        <div class="position-absolute top-0 start-0 p-3 bg-dark bg-opacity-50 text-white">
+                            <h5 class="mb-0" th:text="${movie.movieName}">영화 이름</h5>
+                        </div>
+
+                        <!-- 버튼 배치 -->
+                        <div class="position-absolute bottom-0 start-0 p-3">
+                            <!-- 왜 삼항연산자에서 빨간줄이 나오는지 모르겠음. 실행은 문제없이 되나 일단 주석 -->
+<!--                            <a th:href="${isLoggedIn} ? @{/private/movie/{id}(id=${movie.id})} : @{/movie/{id}(id=${movie.id})}"-->
+<!--                               class="btn btn-primary me-2">영화 상세 정보</a>-->
+                            <a th:if="${isLoggedIn}" th:href="@{/private/movie/{id}(id=${movie.id})}" class="btn btn-primary me-2">영화 상세 정보</a>
+                            <a th:unless="${isLoggedIn}" th:href="@{/movie/{id}(id=${movie.id})}" class="btn btn-primary me-2">영화 상세 정보</a>
+                            <a th:href="@{/reservation(movieId=${movie.id})}" class="btn btn-success">예매하기</a>
+<!--                            <a th:if="${isLoggedIn}" th:href="@{/reservation(movieId=${movie.id})}" class="btn btn-success">예매하기</a>-->
+<!--                            <a th:unless="${isLoggedIn}" th:href="@{/login}" class="btn btn-success">예매하기</a>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="next-btn-feature" class="carousel-btn">&gt;</button>
+    </div>
+
+    <!-- 박스오피스 섹션 -->
+    <div>
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>박스오피스</h1>
+            <a th:if="${isLoggedIn}" th:href="@{/private/movies(category=ALL)}" class="btn btn-link">더 많은 영화보기 +</a>
+            <a th:unless="${isLoggedIn}" th:href="@{/movies(category=ALL)}" class="btn btn-link">더 많은 영화보기 +</a>
+        </div>
+        <!-- 캐러셀 -->
+        <div class="position-relative">
+            <button id="prev-btn-show" class="carousel-btn">&lt;</button>
+            <div id="show-movie-container" class="carousel-container">
+                <div class="carousel-wrapper">
+                    <!-- 영화 카드 반복 (Status.SHOW) -->
+                    <div class="col-md-3 mb-4"
+                         th:each="movie : ${boxOfficeMovies}"
+                         th:if="${movie.status.name() == 'SHOW' || movie.status.name() == 'RECOMMEND'}">
+                        <div class="card h-100 position-relative">
+                            <!-- 등급 아이콘 -->
+                            <div class="rating-icon position-absolute top-0 end-0 mt-2 me-2 text-white fw-bold"
+                                 th:switch="${movie.rating}">
+                                <span th:case="'12세이상관람가'" class="bg-warning rounded px-2 py-1">12</span>
+                                <span th:case="'15세이상관람가'" class="bg-orange rounded px-2 py-1">15</span>
+                                <span th:case="'19세이상관람가'" class="bg-danger rounded px-2 py-1">19</span>
+                                <span th:case="*" class="bg-success rounded px-2 py-1">ALL</span>
+                            </div>
+
+                            <!-- 포스터 이미지 -->
+                            <a th:if="${isLoggedIn}" th:href="@{/private/movie/{id}(id=${movie.id})}">
+                                <img th:src="@{${movie.posterImageUrl}}" class="card-img-top" alt="포스터 이미지">
+                            </a>
+                            <a th:unless="${isLoggedIn}" th:href="@{/movie/{id}(id=${movie.id})}">
+                                <img th:src="@{${movie.posterImageUrl}}" class="card-img-top" alt="포스터 이미지">
+                            </a>
+                            <div class="card-body text-center">
+                                <h5 class="card-title" th:text="${movie.movieName}">영화 제목</h5>
+                                <a th:href="@{/reservation(movieId=${movie.id})}" class="btn btn-success btn-sm">예매하기</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="next-btn-show" class="carousel-btn">&gt;</button>
+        </div>
+    </div>
+
+
+    <!-- 상영 예정 영화 섹션 -->
+    <div class="mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>상영 예정 영화</h1>
+        </div>
+        <!-- 캐러셀 -->
+        <div class="position-relative">
+            <button id="prev-btn-prev" class="carousel-btn">&lt;</button>
+            <div id="prev-movie-container" class="carousel-container">
+                <div class="carousel-wrapper">
+                    <!-- 영화 카드 반복 (Status.PREV) -->
+                    <div class="col-md-3 mb-4"
+                         th:each="movie : ${upcomingMovies}"
+                         th:if="${movie.status.name() == 'PREV'}">
+                        <div class="card h-100 position-relative">
+                            <!-- 등급 아이콘 -->
+                            <div class="rating-icon position-absolute top-0 end-0 mt-2 me-2 text-white fw-bold"
+                                 th:switch="${movie.rating}">
+                                <span th:case="'12세이상관람가'" class="bg-warning rounded px-2 py-1">12</span>
+                                <span th:case="'15세이상관람가'" class="bg-orange rounded px-2 py-1">15</span>
+                                <span th:case="'19세이상관람가'" class="bg-danger rounded px-2 py-1">19</span>
+                                <span th:case="*" class="bg-success rounded px-2 py-1">ALL</span>
+                            </div>
+
+                            <!-- 포스터 이미지 -->
+                            <a th:if="${isLoggedIn}" th:href="@{/private/movie/{id}(id=${movie.id})}">
+                                <img th:src="@{${movie.posterImageUrl}}" class="card-img-top" alt="포스터 이미지">
+                            </a>
+                            <a th:unless="${isLoggedIn}" th:href="@{/movie/{id}(id=${movie.id})}">
+                                <img th:src="@{${movie.posterImageUrl}}" class="card-img-top" alt="포스터 이미지">
+                            </a>
+                            <div class="card-body text-center">
+                                <h5 class="card-title" th:text="${movie.movieName}">영화 제목</h5>
+                                <!-- 버튼 조건 처리 -->
+                                <a th:if="${movie.status.name() != 'PREV'}"
+                                   th:href="@{/reservation(movieId=${movie.id})}"
+                                   class="btn btn-success btn-sm">예매하기</a>
+                                <button th:if="${movie.status.name() == 'PREV'}"
+                                        class="btn btn-secondary btn-sm"
+                                        disabled>개봉 예정</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="next-btn-prev" class="carousel-btn">&gt;</button>
+        </div>
+    </div>
+</div>
+
+    <!-- Bootstrap JS -->
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+    <script th:src="@{/js/initCarousel.js}"></script>
+
+    <script th:src="@{/js/initFeaturedCarousel.js}"></script>
+
+<script>
+    document.getElementById('invisible-button').addEventListener('click', function () {
+        window.location.href = '/admin-login';
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+body {
+    display: flex;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+main {
+    padding: 20px;
+    flex-grow: 1;
+}
+.container {
+    flex: 1;
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+.header {
+    background-color: #EBDED9;
+    color: black;
+    padding: 20px;
+    text-align: justify;
+}
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+.header-content {
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 세로 정렬 */
+    /* justify-content: space-between; 요소 간 간격 조정 */
+    gap: 20px; /* 요소 간 간격 추가 */
+}
+
+.header-content img {
+    width: 70px; /* 이미지 크기 조정 */
+    height: 70px;
+    border-radius: 8px;
+}
+
+.header-content .text {
+    flex-grow: 1; /* 텍스트 영역 확장 */
+}
+.header-content p {
+    margin: 0;
+}

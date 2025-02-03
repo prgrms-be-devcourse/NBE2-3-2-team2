@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>관리자 - 영화 수정</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        nav {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            position: fixed;
+        }
+        nav h3 {
+            margin-top: 0;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 10px 0;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            color: #007BFF;
+        }
+        main {
+            margin-left: 220px;
+            flex: 1;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .poster-img {
+            max-width: 100px;
+            height: auto;
+        }
+        .plot {
+            max-width: 300px;
+            word-wrap: break-word;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+
+<main>
+    <h1>영화 수정</h1>
+    <h3>수정할 영화 ID를 입력하세요.</h3>
+    <form th:action="@{/admin/movie/modify/search}" method="get">
+        <label for="movieId" style="font-weight: bold;">영화 ID:</label>
+        <input type="number" id="movieId" name="movieId" required>
+        <button type="submit">조회</button>
+    </form>
+
+    <h3>검색할 영화 이름를 입력하세요.</h3>
+    <form th:action="@{/admin/movie/modify/idsearch}" method="get">
+        <label for="movieNm" style="font-weight: bold;">영화 이름:</label>
+        <input type="text" id="movieNm" name="movieNm" required>
+        <button type="submit">조회</button>
+    </form>
+
+    <h2>검색 결과</h2>
+    <table border="1" cellspacing="0">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>영화 코드</th>
+            <th>영화 이름</th>
+            <th>배급사</th>
+            <th>감독</th>
+            <th>장르</th>
+            <th>개봉일</th>
+            <th>줄거리</th>
+            <th>포스터</th>
+            <th>스틸이미지(추천영화)</th>
+            <th>상영 시간</th>
+            <th>등급</th>
+            <th>누적 매출</th>
+            <th>누적 관객수</th>
+            <th>상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="movie : ${movies}">
+            <td th:text="${movie.id}"></td>
+            <td th:text="${movie.movieCode}"></td>
+            <td th:text="${movie.movieName}"></td>
+            <td th:text="${movie.companys}"></td>
+            <td th:text="${movie.directorName}"></td>
+            <td th:text="${movie.genreName}"></td>
+            <td th:text="${movie.openDate}"></td>
+            <td><span class="plot" th:title="${movie.plot}" th:text="${movie.plot}"></span></td>
+            <td><img class="poster-img" th:src="${movie.posterImageUrl}" alt="포스터 이미지"></td>
+            <td><img class="poster-img" th:src="${movie.stillImageUrl}" alt="포스터 이미지"></td>
+            <td th:text="${movie.runtime}"></td>
+            <td th:text="${movie.rating}"></td>
+            <td th:text="${movie.salesAcc}"></td>
+            <td th:text="${movie.audiAcc}"></td>
+            <td th:text="${movie.status}"></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

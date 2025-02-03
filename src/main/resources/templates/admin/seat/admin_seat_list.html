@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 - 좌석</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    nav {
+      width: 200px;
+      background-color: #f4f4f4;
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      height: 100vh;
+      position: fixed;
+    }
+    nav h3 {
+      margin-top: 0;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 10px 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav ul li a:hover {
+      color: #007BFF;
+    }
+    main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 20px;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    .btn {
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    .btn-danger:hover {
+      background-color: #a71d2a;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    table th {
+      background-color: #f4f4f4;
+    }
+    table tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
+<main>
+  <h1>상영관ID: <span th:text="${screenId}"></span></h1>
+  <h4>삭제 주의 : 해당 상영관에 상영 일정이 존재할경우, 삭제되지 않습니다.</h4>
+  <form th:action="@{/admin/seat/delete/all/{screenId}(screenId=${screenId})}" method="post">
+    <button type="submit" class="btn btn-danger" onclick="return confirm('정말 모든 좌석을 삭제하시겠습니까?');">
+      좌석 일괄삭제
+    </button>
+  </form>
+  <br />
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>행</th>
+      <th>열</th>
+      <th>좌석종류</th>
+      <th>가격</th>
+      <th>수정</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="seat : ${seats}">
+      <td th:text="${seat.id}"></td>
+      <td th:text="${seat.seatLow}"></td>
+      <td th:text="${seat.seatCol}"></td>
+      <td th:text="${seat.seatType}"></td>
+      <td th:text="${seat.price}"></td>
+      <td>
+        <a th:href="@{/admin/seat/edit/seat/{seatId}(seatId=${seat.id})}" class="btn">수정</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+
+</body>
+</html>
