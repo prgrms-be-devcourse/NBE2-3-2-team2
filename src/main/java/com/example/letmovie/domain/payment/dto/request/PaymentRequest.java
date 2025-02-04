@@ -9,9 +9,7 @@ public class PaymentRequest {
             Long member_id,
             String name,
             int totalPrice
-    ) {
-
-    }
+    ) { }
 
 
 }

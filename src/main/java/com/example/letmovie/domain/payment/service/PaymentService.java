@@ -46,7 +46,7 @@ public class PaymentService {
     @Value("${kakao.pay.secret.key}")
     private String secretKey;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public PaymentResponse.Ready ready(PaymentRequest.Info request) {
 
         String movieName = initializePayment(request);
@@ -113,7 +113,7 @@ public class PaymentService {
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PaymentResponse.Get> getMemberPayment(Long memberId) {
         List<Payment> payments = paymentRepository.findByMemberId(memberId);
         return payments.stream()

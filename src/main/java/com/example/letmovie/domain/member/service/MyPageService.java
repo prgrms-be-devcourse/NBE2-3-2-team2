@@ -31,10 +31,8 @@ public class MyPageService {
     // 현재 회원의 예약 목록을 가져옴
     public List<ReservationDetailsDTO> getReservationsForCurrentMember(Long memberId) {
         List<ReservationDetailsDTO> reservations = reservationRepository.findReservationsByMemberId(memberId);
-        System.out.println("reservations.size() :" + reservations.size());
         for (ReservationDetailsDTO reservation : reservations) {
-            List<SeatDTO> seats = reservationRepository.findSeatsByReservationId(reservation.getReservationId());
-            System.out.println("seats : " + seats.toString());
+            List<SeatDTO> seats = reservationRepository.findSeatsByReservationId(reservation.getReservationId()) ;
             reservation.setSeats(seats); // SeatDTO 리스트를 추가
         }
         return reservations;
