@@ -24,7 +24,6 @@ public class ShowtimeQueryRepositoryImpl implements ShowtimeQueryRepository{
 
     @Override
     public List<Showtime> findShowtimesByMovieNameAndShowtimeDateAndTheaterName(String theaterName, String movieName, LocalDate showtimeDate, boolean isToday) {
-        log.info("----쿼리실행----");
         return queryFactory
                 .selectFrom(showtime)
                 .join(showtime.screen, screen).fetchJoin()

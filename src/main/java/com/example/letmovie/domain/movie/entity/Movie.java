@@ -19,18 +19,6 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@Table(
-//        name = "movie",
-//        indexes = {
-//                @Index(name = "idx_movie_name", columnList = "movieName"), // movieName 컬럼에 대한 인덱스
-//        }
-//)
-//@Table(
-//        name = "movie",
-//        indexes = {
-//                @Index(name = "idx_movie_name_fulltext", columnList = "movie_name", unique = false) // Full-Text Index는 엔티티에서는 선언적으로만 가능
-//        }
-//)
 public class Movie {
 
     @Id
