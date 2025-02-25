@@ -9,7 +9,7 @@
 
 |                          BE                           |                            BE                          |               BE                |                             BE                             |                             BE                             |
 |:---------------------------------------------------------:|:----------------------------------------------------------:|:--------------------------------:|:-----------------------------------------------------------:|:-----------------------------------------------------------:|
-| ![](https://avatars.githubusercontent.com/u/134962465?v=4) | ![](https://avatars.githubusercontent.com/u/134962465?v=4) | ![](https://avatars.githubusercontent.com/u/188425240?v=4) | ![](https://avatars.githubusercontent.com/u/77951852?v=4) | ![](https://avatars.githubusercontent.com/u/134962465?v=4) |
+| ![](https://avatars.githubusercontent.com/u/134962465?v=4) | ![](https://avatars.githubusercontent.com/u/133757475?v=4) | ![](https://avatars.githubusercontent.com/u/188425240?v=4) | ![](https://avatars.githubusercontent.com/u/77951852?v=4) | ![](https://avatars.githubusercontent.com/u/134962465?v=4) |
 |                          Team Leader                           |                            BE                           |               BE                |                             BE                             |                             BE                             |
 |             박지현              |         고진영          | 허정현 |           조희지           |           유수호           |
 | 관리자 기능<br> |  영화 예매 기능 | 결제 시스템 | 로그인 기능 및 인증 | 영화 기능 및 검색
