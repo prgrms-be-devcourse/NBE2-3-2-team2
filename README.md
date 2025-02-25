@@ -31,7 +31,7 @@
 ### 🎨 Template Engine
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white)
 
-### 📡 Communication
+### 📡 HTTP 
 ![RestTemplate](https://img.shields.io/badge/RestTemplate-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![Ajax](https://img.shields.io/badge/Ajax-0769AD?style=for-the-badge&logo=jquery&logoColor=white)
 
@@ -50,8 +50,8 @@
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
 
 
-🔧 Trouble Shooting
-🎯 성능 최적화 담당자: 고진영
+# 🔧 Trouble Shooting
+### 🎯 성능 최적화 담당자: 고진영
 <table>
   <tr>
     <th width="30%">문제 상황</th>
@@ -74,7 +74,8 @@
     <td>사용자 경험 개선</td>
   </tr>
 </table>
-🔄 결제 시스템 담당자: 허정현
+
+### 🔄 결제 시스템 담당자: 허정현
 <table>
   <tr>
     <th width="30%">문제 상황</th>
@@ -97,7 +98,8 @@
     <td>장애 대응력 강화</td>
   </tr>
 </table>
-🔒 보안 & 인증 담당자: 조희지
+
+### 🔒 보안 & 인증 담당자: 조희지
 <table>
   <tr>
     <th width="30%">문제 상황</th>
@@ -120,7 +122,8 @@
     <td>조회 성능 최적화</td>
   </tr>
 </table>
-💾 상영 시스템 담당자: 박지현
+
+### 💾 상영 시스템 담당자: 박지현
 <table>
   <tr>
     <th width="30%">문제 상황</th>
@@ -133,7 +136,8 @@
     <td>데이터 정합성 확보</td>
   </tr>
 </table>
-🔍 검색 시스템 담당자: 유수호
+
+### 🔍 검색 시스템 담당자: 유수호
 <table>
   <tr>
     <th width="30%">문제 상황</th>
