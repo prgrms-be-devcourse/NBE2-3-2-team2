@@ -10,9 +10,9 @@
 |                          BE                           |                            BE                          |               BE                |                             BE                             |                             BE                             |
 |:---------------------------------------------------------:|:----------------------------------------------------------:|:--------------------------------:|:-----------------------------------------------------------:|:-----------------------------------------------------------:|
 | ![](https://avatars.githubusercontent.com/u/134962465?v=4) | ![](https://avatars.githubusercontent.com/u/134962465?v=4) | ![](https://avatars.githubusercontent.com/u/134962465?v=4) | ![](https://avatars.githubusercontent.com/u/97494494?v=4) | ![](https://avatars.githubusercontent.com/u/134962465?v=4) |
-|                          Team Leader                           |                            PM                           |               AWS Admin                |                             Developer & Clerk                             |                             BE                             |
-|             [강시영](https://github.com/Si-rauis)              |         [이중호](https://github.com/bung-dev)          | [이시현](https://github.com/CryingPerson) |           [이용준](https://github.com/usingjun)           |           [이름](https://github.com/username)           |
-| 사업자 관리<br>스터디룸 작성 및 관리 페이지<br>(검색 필터링)<br>Docker 컨테이너화<br>테스트 툴 연결 (K6, Grafana)<br>SSL 인증 | SpringSecurity / OAuth2 <br>Refresh Token<br>Rotation 레디스 저장<br>분산락을 통한 동시성 제어<br>결제 시스템 | 사용자 마이페이지<br>리뷰 작성 및 관리 페이지<br>실시간 알림 (SSE)<br>CI/CD<br>머신 러닝 추천 시스템<br>(Hybrid filtering) | 사업장 등록 및 상세 페이지<br>(카카오 지도 api)<br>레디스 pub/sub, 임시 저장소<br>활용한 실시간 1대 1 채팅<br>(WebSocket, STOMP) | 담당 업무
+|                          Team Leader                           |                            BE                           |               BE                |                             BE                             |                             BE                             |
+|             박지현              |         고진영          | 허정현 |           조희지           |           유수호           |
+| 관리자 기능<br> |  영화 예매 기능 | 결제 시스템 | 로그인 기능 및 인증 | 영화 기능 및 검색
 ## 🛠 Tech Stack
 
 ### 🔨 Backend
@@ -44,6 +44,11 @@
 ### 🌐 External API
 ![KakaoPay](https://img.shields.io/badge/Kakao_Pay-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)
 ![KMDB](https://img.shields.io/badge/영화진흥위원회-FF0000?style=for-the-badge&logo=film&logoColor=white)
+
+### 🛠️ Collaboration Tools
+![Jira](https://img.shields.io/badge/Jira-0052CC?style=for-the-badge&logo=jira&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
+
 
 🔧 Trouble Shooting
 🎯 성능 최적화 담당자: 고진영
@@ -142,86 +147,3 @@
   </tr>
 </table>
 
- .
-├── README.md
-├── gradlew
-├── gradlew.bat
-├── settings.gradle
-└── src
-    ├── main
-    │   ├── java
-    │   │   └── com
-    │   │       └── example
-    │   │           └── letmovie
-    │   │               ├── LetMovieApplication.java
-    │   │               ├── domain
-    │   │               │   ├── admin
-    │   │               │   │   ├── controller
-    │   │               │   │   ├── repository
-    │   │               │   │   └── service
-    │   │               │   ├── auth
-    │   │               │   │   ├── controller
-    │   │               │   │   ├── entity
-    │   │               │   │   ├── repository
-    │   │               │   │   ├── security
-    │   │               │   │   ├── service
-    │   │               │   │   └── util
-    │   │               │   ├── board
-    │   │               │   ├── member
-    │   │               │   │   ├── controller
-    │   │               │   │   ├── dto
-    │   │               │   │   ├── entity
-    │   │               │   │   ├── repository
-    │   │               │   │   └── service
-    │   │               │   ├── movie
-    │   │               │   │   ├── config
-    │   │               │   │   ├── controller
-    │   │               │   │   ├── dto
-    │   │               │   │   ├── entity
-    │   │               │   │   ├── mock
-    │   │               │   │   ├── repository
-    │   │               │   │   └── service
-    │   │               │   ├── payment
-    │   │               │   │   ├── controller
-    │   │               │   │   ├── dto
-    │   │               │   │   ├── entity
-    │   │               │   │   ├── provider
-    │   │               │   │   ├── repository
-    │   │               │   │   ├── scheduler
-    │   │               │   │   ├── service
-    │   │               │   │   └── util
-    │   │               │   └── reservation
-    │   │               │       ├── controller
-    │   │               │       ├── dto
-    │   │               │       ├── entity
-    │   │               │       ├── facade
-    │   │               │       ├── repository
-    │   │               │       └── service
-    │   │               └── global
-    │   │                   ├── advice
-    │   │                   ├── config
-    │   │                   └── exception
-    │   │                       ├── controller
-    │   │                       └── exceptionClass
-    │   │                           ├── auth
-    │   │                           ├── payment
-    │   │                           └── reservation
-    │   └── resources
-    │       ├── application.properties
-    │       ├── db
-    │       ├── static
-    │       │   ├── css
-    │       │   ├── images
-    │       │   └── js
-    │       └── templates
-    └── test
-        └── java
-            └── com
-                └── example
-                    └── letmovie
-                        ├── LetMovieApplicationTests.java
-                        └── domain
-                            └── reservation
-                                ├── controller
-                                ├── facade
-                                └── service
