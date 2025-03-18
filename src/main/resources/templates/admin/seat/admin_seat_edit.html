@@ -14,8 +14,8 @@
       background-color: #f4f4f4;
       padding: 15px;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      height: 100vh; /* 페이지 전체 높이로 설정 */
-      position: fixed; /* 고정된 위치로 설정 */
+      height: 100vh;
+      position: fixed;
     }
     nav h3 {
       margin-top: 0;
@@ -36,22 +36,21 @@
       color: #007BFF;
     }
     main {
-      margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+      margin-left: 220px;
       flex: 1;
       padding: 20px;
     }
   </style>
 </head>
 <body>
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
 
 <main>
-  <!-- Edit Seat Form -->
+  <h2>좌석 수정</h2>
   <form action="/admin/seat/edit/update" method="post">
     <input type="hidden" name="seatId" th:value="${seat.id}">
 
-    <label for="seatType">Seat Type:</label>
+    <label for="seatType">좌석 종류:</label>
     <select id="seatType" name="seatType" required>
       <option th:each="seatType : ${seatTypes}"
               th:value="${seatType}"
@@ -59,10 +58,10 @@
               th:selected="${seatType == seat.seatType}"></option>
     </select>
 
-    <label for="price">Price:</label>
+    <label for="price">가격:</label>
     <input type="number" id="price" name="price" th:value="${seat.price}" required>
 
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn btn-primary">수정</button>
   </form>
 
 </main>

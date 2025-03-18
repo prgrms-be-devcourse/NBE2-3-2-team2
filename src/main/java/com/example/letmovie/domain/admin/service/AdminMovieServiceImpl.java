@@ -42,16 +42,12 @@ public class AdminMovieServiceImpl {
     public String getMovieCodeByName(String movieNm) {
         try {
             String url = MOVIE_LIST_URL + "?key=" + API_KEY + "&movieNm=" + movieNm;
-            //RestTemplate restTemplate = new RestTemplate();
-            System.out.println("Injected RestTemplate: " + restTemplate);
             String response = restTemplate.getForObject(url, String.class);
 
-            // XML 파싱
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(new java.io.ByteArrayInputStream(response.getBytes("UTF-8")));
 
-            // <movie> 태그 안의 <movieNm>과 정확히 일치하는 <movieCd> 찾기
             NodeList movieNodes = document.getElementsByTagName("movie");
             String latestMovieCd = null;
             for (int i = 0; i < movieNodes.getLength(); i++) {
@@ -70,13 +66,11 @@ public class AdminMovieServiceImpl {
                     }
                 }
 
-                // movieNm이 정확히 일치하는 경우 latestMovieCd를 갱신
                 if (movieNm.equals(currentMovieNm)) {
                     latestMovieCd = currentMovieCd;
                 }
             }
-
-            return latestMovieCd; // 가장 나중에 찾은 일치하는 movieCd 반환
+            return latestMovieCd;
         } catch (Exception e) {
             System.out.println("Error(getMovieCodeByName) : " + e.getMessage());
         }
@@ -86,52 +80,47 @@ public class AdminMovieServiceImpl {
 
     // 영화 상세정보 조회
     public Map<String, Object> getMovieInfoByCode(String movieCd) {
-        Map<String, Object> movieDetails = new LinkedHashMap<>(); // LinkedHashMap 사용
+        Map<String, Object> movieDetails = new LinkedHashMap<>();
         try {
             String url = MOVIE_INFO_URL + "?key=" + API_KEY + "&movieCd=" + movieCd;
 
             DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
             Document doc = dBuilder.parse(url);
-            // 제일 첫번째 태그
+
             doc.getDocumentElement().normalize();
-            // 파싱할 tag
+
             NodeList nList = doc.getElementsByTagName("movieInfo");
 
             for (int temp = 0; temp < nList.getLength(); temp++) {
                 Node nNode = nList.item(temp);
                 Element eElement = (Element) nNode;
 
-                // 데이터를 삽입 순서대로 추가
                 movieDetails.put("movieName", getTagValue("movieNm", eElement));
                 movieDetails.put("movieCode", getTagValue("movieCd", eElement));
                 movieDetails.put("openDate", getTagValue("openDt", eElement));
 
-                //movieDetails.put("rating", getTagValue("audits", "audit","watchGradeNm", eElement));
-                // 가장 마지막 심의 등급 정보를 가져오는 로직
                 NodeList auditList = eElement.getElementsByTagName("audit");
                 if (auditList.getLength() > 0) {
-                    Element lastAuditElement = (Element) auditList.item(auditList.getLength() - 1); // 마지막 노드 가져오기
+                    Element lastAuditElement = (Element) auditList.item(auditList.getLength() - 1);
                     String watchGradeNm = getTagValue("watchGradeNm", lastAuditElement);
-                    movieDetails.put("rating", watchGradeNm); // 가장 마지막 심의 등급 저장
+                    movieDetails.put("rating", watchGradeNm);
                 } else {
-                    movieDetails.put("rating", "미등록"); // 심의 등급이 없는 경우 기본값
+                    movieDetails.put("rating", "미등록");
                 }
-
 
                 movieDetails.put("genreName", getTagValue("genres", "genre","genreNm", eElement));
                 movieDetails.put("runtime", getTagValue("showTm", eElement));
                 movieDetails.put("directorName", getTagValue("directors", "director","peopleNm", eElement));
 
-                // 배급사 필터링 로직 추가
                 NodeList companyList = eElement.getElementsByTagName("company");
                 for (int i = 0; i < companyList.getLength(); i++) {
                     Element companyElement = (Element) companyList.item(i);
                     String companyPartNm = getTagValue("companyPartNm", companyElement);
-                    if ("배급사".equals(companyPartNm)) { // "배급사"만 필터링
+                    if ("배급사".equals(companyPartNm)) {
                         String companyNm = getTagValue("companyNm", companyElement);
-                        movieDetails.put("companys", companyNm); // 배급사 이름 저장
-                        break; // 첫 번째 배급사만 가져오고 종료
+                        movieDetails.put("companys", companyNm);
+                        break;
                     }
                 }
             }
@@ -158,12 +147,10 @@ public class AdminMovieServiceImpl {
     }
 
     public void addMovie(Movie movie) {
-        // 기본값 설정
         movie.setId(null);
         movie.setSalesAcc("0");
         movie.setAudiAcc("0");
 
-        // 데이터 저장
         adminMovieJpaRepository.save(movie);
     }
 
@@ -192,12 +179,8 @@ public class AdminMovieServiceImpl {
 
     // tag값의 정보를 가져오는 함수
     public static String getTagValue(String tag, Element eElement) {
-
-        //결과를 저장할 result 변수 선언
         String result = "";
-
         NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
-
         result = nlList.item(0).getTextContent();
 
         return result;
@@ -205,15 +188,10 @@ public class AdminMovieServiceImpl {
 
     // 자식 tag값의 정보를 가져오는 함수
     public static String getTagValue(String tag, String childTag, Element eElement) {
-
-        //결과를 저장할 result 변수 선언
         String result = "";
-
         NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
 
         for(int i = 0; i < eElement.getElementsByTagName(childTag).getLength(); i++) {
-
-            //result += nlList.item(i).getFirstChild().getTextContent() + " ";
             result += nlList.item(i).getChildNodes().item(0).getTextContent() + " ";
         }
 
@@ -222,10 +200,8 @@ public class AdminMovieServiceImpl {
 
     // 손자 tag값의 정보를 가져오는 함수
     public static String getTagValue(String parentTag, String childTag, String grandChildTag, Element eElement) {
-        // 결과를 저장할 result 변수
         StringBuilder result = new StringBuilder();
 
-        // parentTag의 NodeList 가져오기
         NodeList parentNodeList = eElement.getElementsByTagName(parentTag);
 
         for (int i = 0; i < parentNodeList.getLength(); i++) {
@@ -233,8 +209,6 @@ public class AdminMovieServiceImpl {
 
             if (parentNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element parentElement = (Element) parentNode;
-
-                // childTag의 NodeList 가져오기
                 NodeList childNodeList = parentElement.getElementsByTagName(childTag);
 
                 for (int j = 0; j < childNodeList.getLength(); j++) {
@@ -242,8 +216,6 @@ public class AdminMovieServiceImpl {
 
                     if (childNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element childElement = (Element) childNode;
-
-                        // grandChildTag 값 가져오기
                         NodeList grandChildNodeList = childElement.getElementsByTagName(grandChildTag);
                         for (int k = 0; k < grandChildNodeList.getLength(); k++) {
                             Node grandChildNode = grandChildNodeList.item(k);
@@ -255,6 +227,6 @@ public class AdminMovieServiceImpl {
                 }
             }
         }
-        return result.toString().trim(); // 결과 반환
+        return result.toString().trim();
     }
 }

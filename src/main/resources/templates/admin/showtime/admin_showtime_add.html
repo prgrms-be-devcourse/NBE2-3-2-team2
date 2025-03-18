@@ -14,8 +14,8 @@
       background-color: #f4f4f4;
       padding: 15px;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      height: 100vh; /* 페이지 전체 높이로 설정 */
-      position: fixed; /* 고정된 위치로 설정 */
+      height: 100vh;
+      position: fixed;
     }
     nav h3 {
       margin-top: 0;
@@ -36,23 +36,19 @@
       color: #007BFF;
     }
     main {
-      margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+      margin-left: 220px;
       flex: 1;
       padding: 20px;
     }
   </style>
 </head>
 <body>
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
-
 <main>
   <h1>상영시간대 추가</h1>
-
   <form action="/admin/showtime/add" method="post">
     <label for="screenId" style="font-weight: bold;">상영관:</label>
     <select id="screenId" name="screenId" required>
-      <!--<option th:each="screen : ${screens}" th:value="${screen.id}" th:text="${screen.screenName} + '(' + ${showtime.screen.id} + ')'"></option>-->
       <option th:each="screen : ${screens}"
               th:value="${screen.id}"
               th:text="${screen.screenName + ' (' + screen.id + ')'}">
@@ -77,8 +73,5 @@
     <button type="submit" class="btn btn-primary">추가</button>
   </form>
 </main>
-
-
-
 </body>
 </html>

@@ -18,15 +18,14 @@ import com.example.letmovie.domain.reservation.repository.ShowtimeRepository;
 import com.example.letmovie.global.exception.ErrorCodes;
 import com.example.letmovie.global.exception.exceptionClass.auth.MemberNotFoundException;
 import com.example.letmovie.global.exception.exceptionClass.payment.PaymentException;
-import com.example.letmovie.global.exception.exceptionClass.reservation.ReservationNotFound;
-import com.example.letmovie.global.exception.exceptionClass.reservation.SeatNotFound;
+import com.example.letmovie.global.exception.exceptionClass.reservation.ReservationNotFoundException;
+import com.example.letmovie.global.exception.exceptionClass.reservation.SeatNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +45,7 @@ public class ReservationService {
 
     @Transactional
     public ReservationResponseDTO reservation(List<String> seatList, Long memberId, Long showtimeId) {
-        Showtime showtime = showtimeRepository.findByIdWithPessimisticLock(showtimeId).orElseThrow(SeatNotFound::new);
+        Showtime showtime = showtimeRepository.findByIdWithPessimisticLock(showtimeId).orElseThrow(SeatNotFoundException::new);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
         // 먼저 Reservation 생성
@@ -68,11 +67,11 @@ public class ReservationService {
 
             Long screenId = showtime.getScreen().getId();
             Seat seatEntity = seatRepository.findByColAndRowAndScreenId(col, row, screenId)
-                    .orElseThrow(SeatNotFound::new);
+                    .orElseThrow(SeatNotFoundException::new);
 
             if(!seatEntity.isAble()) {
                 char rowLabel = (char) ('A' + row - 1);
-                throw new SeatNotFound("좌석 " + rowLabel  + "-" + col + "는 이미 선택된 좌석입니다.");
+                throw new SeatNotFoundException("좌석 " + rowLabel  + "-" + col + "는 이미 선택된 좌석입니다.");
             }
 
             ReservationSeat reservationSeat = ReservationSeat.createReservationSeat(seatEntity, showtime);
@@ -92,7 +91,7 @@ public class ReservationService {
 
     @Transactional
     public void reservationCancel(Long reservationId) {
-            Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+            Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFoundException::new);
             Payment payment = paymentRepository.findByReservationId(reservationId).orElseThrow(() -> new PaymentException(ErrorCodes.PAYMENT_NOT_FOUND));
             PaymentResponse.Cancel cancelResult = paymentService.cancel(payment.getId());
 

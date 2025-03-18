@@ -14,8 +14,8 @@
       background-color: #f4f4f4;
       padding: 15px;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      height: 100vh; /* 페이지 전체 높이로 설정 */
-      position: fixed; /* 고정된 위치로 설정 */
+      height: 100vh;
+      position: fixed;
     }
     nav h3 {
       margin-top: 0;
@@ -36,26 +36,23 @@
       color: #007BFF;
     }
     main {
-      margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+      margin-left: 220px;
       flex: 1;
       padding: 20px;
     }
   </style>
 </head>
 <body>
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
-
 <main>
   <form action="/admin/screen/modify" method="post">
     <input type="hidden" name="id" th:value="${screen.id}">
 
-    <label for="screenName">Screen Name:</label>
+    <label for="screenName">상영관 이름:</label>
     <input type="text" id="screenName" name="screenName" th:value="${screen.screenName}" required>
 
-    <button type="submit">Save Changes</button>
+    <button type="submit">수정</button>
   </form>
 </main>
-
 </body>
 </html>

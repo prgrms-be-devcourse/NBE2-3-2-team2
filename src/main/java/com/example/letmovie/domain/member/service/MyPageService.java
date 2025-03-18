@@ -10,8 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +29,24 @@ public class MyPageService {
         this.reservationRepository = reservationRepository;
     }
 
-    // 현재 회원의 예약 목록을 가져옴
-    public List<ReservationDetailsDTO> getReservationsForCurrentMember(Long memberId) {
-        List<ReservationDetailsDTO> reservations = reservationRepository.findReservationsByMemberId(memberId);
+    // 예매 목록 조회
+    @Transactional(readOnly = true)
+    public List<ReservationDetailsDTO> getReservationsWithSeats(Long memberId) {
+        List<ReservationDetailsDTO> reservations = reservationRepository.findReservationsWithSeats(memberId);
+        Map<Long, ReservationDetailsDTO> reservationMap = new HashMap<>();
+
         for (ReservationDetailsDTO reservation : reservations) {
-            List<SeatDTO> seats = reservationRepository.findSeatsByReservationId(reservation.getReservationId()) ;
-            reservation.setSeats(seats); // SeatDTO 리스트를 추가
+            if (!reservationMap.containsKey(reservation.getReservationId())) {
+                reservationMap.put(reservation.getReservationId(), reservation);
+            } else {
+                reservationMap.get(reservation.getReservationId())
+                        .addSeat(new SeatDTO( // SeatRow를 문자로 넣기 위해 새로 생성함
+                                reservation.getSeats().get(0).getId(),
+                                reservation.getSeats().get(0).getSeatLow(),
+                                reservation.getSeats().get(0).getSeatCol()));
+            }
         }
-        return reservations;
+        return new ArrayList<>(reservationMap.values());
     }
 
     // 비밀번호 변경 및 저장

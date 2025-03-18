@@ -27,7 +27,7 @@ public class Seat {
     private List<ReservationSeat> reservationSeats = new ArrayList<>();
 
     @NotNull
-    @Enumerated(EnumType.STRING) //enum
+    @Enumerated(EnumType.STRING)
     private SeatType seatType;
 
     @NotNull

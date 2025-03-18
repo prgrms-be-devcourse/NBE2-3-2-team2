@@ -16,9 +16,6 @@ public interface AdminMovieJpaRepository extends JpaRepository<Movie, Long> {
     @Query(value = "select m from Movie m where m.movieName like :movieName%")
     List<Movie> findMovieByName(@Param("movieName") String movieName);
 
-    /*@Query(value = "select m from Movie m where m.movieName like %:movieName%")
-    Page<Movie> findMovieByNamewithPage(@Param("movieName") String movieName, Pageable pageable);*/
-
     @Query(value = "select m from Movie m")
     Page<Movie> findAllMovieswithPage(Pageable pageable);
 }

@@ -14,8 +14,8 @@
             background-color: #f4f4f4;
             padding: 15px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            height: 100vh; /* 페이지 전체 높이로 설정 */
-            position: fixed; /* 고정된 위치로 설정 */
+            height: 100vh;
+            position: fixed;
         }
         nav h3 {
             margin-top: 0;
@@ -36,23 +36,23 @@
             color: #007BFF;
         }
         main {
-            margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+            margin-left: 220px;
             flex: 1;
             padding: 20px;
         }
         .poster-img {
-            max-width: 200px; /* 이미지 최대 너비 */
-            height: auto;    /* 비율에 맞춰 자동으로 높이 조정 */
-            border: 1px solid #ddd; /* 선택적 테두리 */
-            border-radius: 5px;     /* 선택적 모서리 둥글게 */
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* 선택적 그림자 */
+            max-width: 200px;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .button-group {
             display: flex;
-            align-items: center; /* 버튼을 세로로 정렬 */
-            gap: 10px; /* 버튼 간 간격 */
-            margin-top: 20px; /* 버튼 그룹 위쪽 여백 */
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         .button-group button,
@@ -77,19 +77,16 @@
         }
 
         .cancel-button:hover {
-            background-color: darkgray; /* 선택적으로 호버 효과 */
+            background-color: darkgray;
         }
     </style>
 </head>
 <body>
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
 <main>
     <h1>영화 삭제 확인</h1>
-
     <h3>다음 영화를 삭제하시겠습니까?</h3>
 
-    <!-- 영화 정보 표시 -->
     <div>
         <p><img class="poster-img" th:src="${movie.posterImageUrl}" alt="포스터 이미지"></p>
         <p><strong>영화 코드:</strong> <span th:text="${movie.movieCode}"></span></p>
@@ -97,13 +94,11 @@
     </div>
 
     <div class="button-group">
-        <!-- 삭제 버튼 -->
         <form th:action="@{/admin/movie/delete/ok}" method="post" style="display: inline;">
             <input type="hidden" name="movieId" th:value="${movie.id}">
             <button type="submit" class="delete-button">삭제</button>
         </form>
 
-        <!-- 취소 버튼 -->
         <a href="/admin/movie/delete" class="cancel-button">취소</a>
     </div>
 </main>

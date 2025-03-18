@@ -33,7 +33,7 @@ public class ShowtimeQueryRepositoryImpl implements ShowtimeQueryRepository{
                         theater.theaterName.eq(theaterName),
                         showtime.movie.movieName.eq(movieName),
                         showtime.showtimeDate.eq(showtimeDate),
-                        isToday ? showtime.showtimeTime.gt(LocalTime.now()) : null // 동적 조건 추가
+                        isToday ? showtime.showtimeTime.gt(LocalTime.now()) : null
                 )
                 .orderBy(showtime.showtimeTime.asc())
                 .fetch();

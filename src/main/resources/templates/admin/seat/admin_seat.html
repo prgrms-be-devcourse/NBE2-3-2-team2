@@ -14,8 +14,8 @@
       background-color: #f4f4f4;
       padding: 15px;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      height: 100vh; /* 페이지 전체 높이로 설정 */
-      position: fixed; /* 고정된 위치로 설정 */
+      height: 100vh;
+      position: fixed;
     }
     nav h3 {
       margin-top: 0;
@@ -36,7 +36,7 @@
       color: #007BFF;
     }
     main {
-      margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+      margin-left: 220px;
       flex: 1;
       padding: 20px;
     }
@@ -81,9 +81,7 @@
   </style>
 </head>
 <body>
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
-
 <main>
   <h1>좌석관리</h1>
   <h3>좌석을 관리할 상영관 목록</h3>
@@ -109,12 +107,9 @@
     </tr>
     </tbody>
   </table>
-
-  <!-- 에러 메시지 표시 영역 -->
   <div th:if="${error}" style="color: red; font-weight: bold; margin-bottom: 10px;">
     <p th:text="${error}"></p>
   </div>
-
 </main>
 </body>
 </html>

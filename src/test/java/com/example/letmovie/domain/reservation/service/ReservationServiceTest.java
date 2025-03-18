@@ -16,13 +16,9 @@ import com.example.letmovie.domain.reservation.entity.Seat;
 import com.example.letmovie.domain.reservation.entity.SeatType;
 import com.example.letmovie.domain.reservation.facade.OptimisticLockReservationFacade;
 import com.example.letmovie.domain.reservation.repository.*;
-import com.example.letmovie.domain.reservation.service.lock.OptimisticLockReservationService;
 import com.example.letmovie.domain.reservation.service.lock.PessimisticLockReservationService;
-import com.example.letmovie.domain.reservation.service.ReservationService;
-import com.example.letmovie.domain.reservation.service.ShowtimeService;
-import com.example.letmovie.global.exception.exceptionClass.reservation.SeatNotFound;
+import com.example.letmovie.global.exception.exceptionClass.reservation.SeatNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.type.SetType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +33,6 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -220,7 +215,7 @@ public class ReservationServiceTest {
         seats.add("1-1");
 
         //expected
-        assertThrows(SeatNotFound.class, () -> reservationService.reservation(seats, member.getId(), showTime.getId()));
+        assertThrows(SeatNotFoundException.class, () -> reservationService.reservation(seats, member.getId(), showTime.getId()));
     }
 
     @Test

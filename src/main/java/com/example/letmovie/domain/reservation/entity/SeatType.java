@@ -1,5 +1,6 @@
 package com.example.letmovie.domain.reservation.entity;
 
+import com.example.letmovie.global.exception.exceptionClass.reservation.InvalidSeatPriceException;
 import lombok.Getter;
 
 @Getter
@@ -13,7 +14,7 @@ public enum SeatType {
 
     SeatType(int price) {
         if (price < 0) {
-            throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
+            throw new InvalidSeatPriceException();
         }
         this.price = price;
     }

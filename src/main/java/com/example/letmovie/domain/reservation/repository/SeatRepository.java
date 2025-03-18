@@ -23,9 +23,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
             "WHERE s.seatCol = :seatCol AND s.seatLow = :seatLow")
     Optional<Seat> findByColAndRowAndSeat(@Param("seatCol") int seatCol, @Param("seatLow") int seatLow);
 
-    /**
-     * 비관적 락 테스트
-     */
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT s " +
             "FROM Seat s " +
@@ -34,9 +32,6 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
                                               @Param("seatLow") int seatLow,
                                               @Param("screenId") Long screenId);
 
-    /**
-     * 낙관적 락 테스트
-     */
     @Lock(LockModeType.OPTIMISTIC)
     @Query("SELECT s " +
             "FROM Seat s " +

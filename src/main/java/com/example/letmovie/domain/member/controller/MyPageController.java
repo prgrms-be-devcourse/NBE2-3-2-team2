@@ -68,8 +68,7 @@ public class MyPageController {
                     .orElseThrow(() -> new IllegalArgumentException("멤버가 존재하지 않습니다."));
 
             Long memberId = member.getId();
-            System.out.println("reservationDetails memberId : " + memberId);
-            List<ReservationDetailsDTO> reservations = myPageService.getReservationsForCurrentMember(memberId);
+            List<ReservationDetailsDTO> reservations = myPageService.getReservationsWithSeats(memberId);
             model.addAttribute("reservations", reservations);
 
             return "mypage/reservation_details"; // 예매 내역 페이지 뷰

@@ -45,9 +45,8 @@ public class MovieServiceImpl {
 
     @Cacheable(value = "movies_by_status_limited", key = "{#status + '-' + #limit}")
     public List<Movie> getMoviesByStatusWithLimit(Status status, int limit) {
-        log.info("--------------------------------------------------status0= {}", status);
+
         if (status == null) {
-            log.info("--------------------------------------------------status1= {}", status);
             return Collections.emptyList();
         }
         Pageable pageable = PageRequest.of(0, limit);
@@ -57,22 +56,6 @@ public class MovieServiceImpl {
     public Movie getMovieById(int movieId) {
         return movieJpaRepository.findById(movieId).orElse(null);
     }
-
-//    // 검색 기능
-//    @Cacheable(value = "movies", key = "#query") // Redis 캐싱 추가
-//    public List<Movie> searchMoviesByName(String query) {
-//
-//        //long startTime = System.currentTimeMillis(); // 시작 시간
-//
-////        List<Movie> movies = movieJpaRepository.findByMovieNameContainingIgnoreCase(query);
-////        List<Movie> movies = movieJpaRepository.findByMovieNameStartingWithIgnoreCase(query);
-//        // full Text 인덱스
-//        List<Movie> movies = movieJpaRepository.searchMoviesByNameFullText(query);
-//        //long endTime = System.currentTimeMillis(); // 종료 시간
-//
-//        //log.info("영화 검색(연관 검색) - 검색어: {}, time : {} ms", query, (endTime - startTime));
-//        return movies;
-//    }
 
     /**
      * hashCode()를 사용한 이유는 캐시 키의 길이를 줄이고 효율적으로 관리하기 위함.
@@ -84,8 +67,6 @@ public class MovieServiceImpl {
     @Cacheable(value = "movies", key = "#query.hashCode() + '-' + #root.methodName")
     public List<Movie> searchMoviesByName(String query) {
 
-        long startTime = System.currentTimeMillis(); // 시작 시간
-
         if (query == null || query.isBlank()) {
             log.warn("빈 검색어 입력");
             return Collections.emptyList();
@@ -94,10 +75,6 @@ public class MovieServiceImpl {
         //List<Movie> movies = movieJpaRepository.findByMovieNameContainingIgnoreCase(query);
 
         List<Movie> movies = movieJpaRepository.searchMoviesByNameFullText(preprocessQuery(query));
-
-        long endTime = System.currentTimeMillis(); // 종료 시간
-
-        log.info("영화 검색(연관 검색) - 검색어: {}, time : {} ms", query, (endTime - startTime));
 
         return movies;
     }
@@ -128,7 +105,8 @@ public class MovieServiceImpl {
     }
 
     // 상태별 페이징 처리
-    @Cacheable(value = "movies_by_status", key = "#status.name() + '-' + #page + '-' + #size")
+//    @Cacheable(value = "movies_by_status", key = "#status.name() + '-' + #page + '-' + #size")
+    @Cacheable(value = "movies_by_status_limited", key = "{#status + '-' + #limit}")
     public MoviePageDTO getMoviesByStatus(Status status, int page, int size) {
         Page<Movie> moviePage = movieJpaRepository.findByStatus(status, PageRequest.of(page - 1, size));
         return convertToDTO(moviePage);

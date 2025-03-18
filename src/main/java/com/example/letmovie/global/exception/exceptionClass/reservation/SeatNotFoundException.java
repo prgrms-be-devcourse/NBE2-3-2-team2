@@ -5,15 +5,15 @@ import com.example.letmovie.global.exception.exceptionClass.LetMovieException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SeatNotFound extends LetMovieException {
+public class SeatNotFoundException extends LetMovieException {
 
     private static final String MESSAGE = ErrorCodes.SEAT_NOT_FOUND.getMessage();
 
-    public SeatNotFound() {
+    public SeatNotFoundException() {
         super(MESSAGE);
     }
 
-    public SeatNotFound(String message) {
+    public SeatNotFoundException(String message) {
         super(message);
         log.info("메시지 : = {} ",message);
     }

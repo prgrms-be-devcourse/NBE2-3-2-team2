@@ -31,66 +31,63 @@ public class AdminShowtimeServiceImpl {
     @Autowired
     private AdminSeatRepository adminSeatRepository;
 
-    //상영시간대
-    // Create a new showtime
+    // 상영시간대
     @Transactional
     public void createShowtime(Showtime showtime) {
         adminShowtimeRepository.save(showtime);
     }
 
-    // Retrieve all showtimes
+    // 상영시간대 조회
     public List<Showtime> getAllShowtimes() {
         return adminShowtimeRepository.findAll();
     }
 
-    // get all screens
+    // 상영관 리스트 가져오기
     public List<Screen> getAllScreens() {
-        return adminScreenRepository.findAll(); // 상영관 리스트 가져오기
+        return adminScreenRepository.findAll();
     }
 
-    // Get all screen names
+    // 상영관 이름 가져오기
     public List<String> getAllScreenNames() {
         return adminScreenRepository.findAll().stream()
-                .map(Screen::getScreenName) // Assuming Screen has a method to get its name
+                .map(Screen::getScreenName)
                 .collect(Collectors.toList());
     }
 
-    // Get all screen names by screen ID - 상영관 오류 수정
+    // 상영관 이름 screenId로 매핑해서 가져오기
     public Map<Long, String> getAllScreenNamesById() {
         return adminScreenRepository.findAll().stream()
-                .collect(Collectors.toMap(Screen::getId, Screen::getScreenName)); // screenId로 매핑
+                .collect(Collectors.toMap(Screen::getId, Screen::getScreenName));
     }
 
-    // find all movies
+    // 모든 영화 목록 가져오기
     public List<Movie> findAllMovies(){
         List<Movie> movies = adminMovieJpaRepository.findAllMovies();
-
         return movies;
     }
 
-    // Get all movie names
     public List<String> getAllMovieNames() {
         return adminMovieJpaRepository.findAll().stream()
-                .map(Movie::getMovieName) // Assuming Movie has a method to get its title
+                .map(Movie::getMovieName)
                 .collect(Collectors.toList());
     }
 
-    // Get all movie names by movie ID - 영화명 오류 방지
+    // 상영관 이름 movieId로 매핑해서 가져오기
     public Map<Long, String> getAllMovieNamesById() {
         return adminMovieJpaRepository.findAll().stream()
                 .collect(Collectors.toMap(Movie::getId, Movie::getMovieName));
     }
 
-    // Retrieve showtimes by screen ID
     public List<Showtime> getShowtimesByScreenId(Long screenId) {
         return adminShowtimeRepository.findByScreenId(screenId);
     }
 
-    // Retrieve showtimes by movie ID
+    // movieID로 상영시간대 조회
     public List<Showtime> getShowtimesByMovieId(Long movieId) {
         return adminShowtimeRepository.findByMovieId(movieId);
     }
 
+    // 상영시간대 추가
     public void addShowtime(Long screenId, Long movieId, LocalDate showtimeDate, LocalTime showtimeTime, int totalSeats, int remainingSeats) {
         Screen screen = adminScreenRepository.findById(screenId).orElseThrow(() -> new IllegalArgumentException("Invalid screen ID"));
         Movie movie = adminMovieJpaRepository.findById(movieId).orElseThrow(() -> new IllegalArgumentException("Invalid movie ID"));
@@ -107,11 +104,12 @@ public class AdminShowtimeServiceImpl {
         adminShowtimeRepository.save(showtime);
     }
 
+    // 상영관 ID를 통해 예매 가능한 좌석수 반환
     public int countAvailableSeatsByScreenId(Long screenId) {
         return adminSeatRepository.countAvailableSeatsByScreenId(screenId);
     }
 
-    // Delete showtime
+    // 상영시간대 삭제
     @Transactional
     public void deleteShowtime(Long id) {
         adminShowtimeRepository.deleteById(id);

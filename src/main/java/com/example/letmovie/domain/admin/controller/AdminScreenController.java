@@ -58,7 +58,7 @@ public class AdminScreenController {
     @PostMapping("/screen/modify")
     public String modifyScreenSubmit(@ModelAttribute ScreenDTO screenDTO, RedirectAttributes redirectAttributes) {
         try {
-            System.out.println("Received Screen ID: " + screenDTO.getId()); // Debugging 출력
+            System.out.println("Received Screen ID: " + screenDTO.getId());
             adminService.updateScreen(screenDTO);
             redirectAttributes.addFlashAttribute("success", "상영관 정보가 성공적으로 수정되었습니다.");
         } catch (Exception e) {

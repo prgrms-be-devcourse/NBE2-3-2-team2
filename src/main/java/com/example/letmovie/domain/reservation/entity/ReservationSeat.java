@@ -26,7 +26,7 @@ public class ReservationSeat {
     private Seat seat;
 
     @NotNull
-    private int seatPrice; //좌석가격 추가
+    private int seatPrice;
 
     /**
      *  연관관계 메서드

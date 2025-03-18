@@ -14,8 +14,8 @@
       background-color: #f4f4f4;
       padding: 15px;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      height: 100vh; /* 페이지 전체 높이로 설정 */
-      position: fixed; /* 고정된 위치로 설정 */
+      height: 100vh;
+      position: fixed;
     }
     nav h3 {
       margin-top: 0;
@@ -36,7 +36,7 @@
       color: #007BFF;
     }
     main {
-      margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+      margin-left: 220px;
       flex: 1;
       padding: 20px;
     }
@@ -81,16 +81,12 @@
   </style>
 </head>
 <body>
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
-
 <main>
   <h1>상영시간대</h1>
   <h4>삭제 주의 : 해당 상영 일정에 예매내역이 있을 경우, 삭제되지 않습니다.</h4>
   <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
-
   <a href="/admin/showtime/add" class="btn">상영시간대 추가</a>
-
   <table class="table">
     <thead>
     <tr>
@@ -107,14 +103,13 @@
     <tbody>
     <tr th:each="showtime : ${showtimes}">
       <td th:text="${showtime.id}"></td>
-      <td th:text="${screenNames[showtime.screen.id]} + '(' + ${showtime.screen.id} + ')'"></td> <!-- Screen Name from index -->
-      <td th:text="${movieNames[showtime.movie.id]}"></td> <!-- Movie Name from index -->
+      <td th:text="${screenNames[showtime.screen.id]} + '(' + ${showtime.screen.id} + ')'"></td>
+      <td th:text="${movieNames[showtime.movie.id]}"></td>
       <td th:text="${showtime.showtimeDate}"></td>
       <td th:text="${showtime.showtimeTime}"></td>
       <td th:text="${showtime.totalSeats}"></td>
       <td th:text="${showtime.remainingSeats}"></td>
       <td>
-        <!--<a th:href="@{/admin/showtime/edit/{id}(id=${showtime.id})}" class="btn btn-warning">Edit</a>-->
         <a th:href="@{/admin/showtime/delete/{id}(id=${showtime.id})}" class="btn btn-danger" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
       </td>
     </tr>

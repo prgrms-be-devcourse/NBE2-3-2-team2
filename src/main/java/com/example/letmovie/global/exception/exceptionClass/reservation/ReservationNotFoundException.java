@@ -3,11 +3,11 @@ package com.example.letmovie.global.exception.exceptionClass.reservation;
 import com.example.letmovie.global.exception.ErrorCodes;
 import com.example.letmovie.global.exception.exceptionClass.LetMovieException;
 
-public class ReservationNotFound extends LetMovieException {
+public class ReservationNotFoundException extends LetMovieException {
 
     private static final String MESSAGE = ErrorCodes.RESERVATION_NOT_FOUND.getMessage();
 
-    public ReservationNotFound() {
+    public ReservationNotFoundException() {
         super(MESSAGE);
     }
 

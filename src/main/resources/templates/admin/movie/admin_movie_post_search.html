@@ -13,8 +13,8 @@
             background-color: #f4f4f4;
             padding: 15px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            height: 100vh; /* 페이지 전체 높이로 설정 */
-            position: fixed; /* 고정된 위치로 설정 */
+            height: 100vh;
+            position: fixed;
         }
         nav h3 {
             margin-top: 0;
@@ -35,76 +35,52 @@
             color: #007BFF;
         }
         main {
-            margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+            margin-left: 220px;
             flex: 1;
             padding: 20px;
         }
     </style>
 </head>
 <body>
-
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
-
-<!-- Main content -->
 <main>
-    <!-- 검색 폼 -->
     <h1>영화 추가</h1>
-
     <h3>추가할 영화를 검색해서 조회해주세요.</h3>
     <form th:action="@{/admin/movie/post/search}" method="get">
         <label for="putmovieNm" style="font-weight: bold;">영화 이름:</label>
         <input type="text" id="putmovieNm" name="putmovieNm" required>
         <button type="submit">검색</button>
     </form>
-
-    <!-- 추가 정보 입력 -->
     <form th:action="@{/admin/movie/post/add}" method="post" th:if="${movieDetails != null}">
         <h3>영화 정보</h3>
-
-        <!-- 영화 코드 -->
         <div th:if="${movieDetails['movieCode'] != null}">
             <label for="movieCode" style="font-weight: bold;">영화 코드:</label>
             <input type="text" id="movieCode" name="movieCode" th:value="${movieDetails['movieCode']}" readonly />
         </div>
-
-        <!-- 영화 이름 -->
         <div th:if="${movieDetails['movieName'] != null}">
             <label for="movieName" style="font-weight: bold;">영화 이름:</label>
             <input type="text" id="movieName" name="movieName" th:value="${movieDetails['movieName']}" readonly />
         </div>
-
-        <!-- 개봉일 -->
         <div th:if="${movieDetails['openDate'] != null}">
             <label for="openDate" style="font-weight: bold;">개봉일:</label>
             <input type="text" id="openDate" name="openDate" th:value="${movieDetails['openDate']}" readonly />
         </div>
-
-        <!-- 심의 등급 -->
         <div th:if="${movieDetails['rating'] != null}">
             <label for="rating" style="font-weight: bold;">심의 등급:</label>
             <input type="text" id="rating" name="rating" th:value="${movieDetails['rating']}" readonly />
         </div>
-
-        <!-- 장르 -->
         <div th:if="${movieDetails['genreName'] != null}">
             <label for="genreName" style="font-weight: bold;">장르:</label>
             <input type="text" id="genreName" name="genreName" th:value="${movieDetails['genreName']}" readonly />
         </div>
-
-        <!-- 상영 시간 -->
         <div th:if="${movieDetails['runtime'] != null}">
             <label for="runtime" style="font-weight: bold;">상영 시간:</label>
             <input type="text" id="runtime" name="runtime" th:value="${movieDetails['runtime']}" readonly />
         </div>
-
-        <!-- 감독 -->
         <div th:if="${movieDetails['directorName'] != null}">
             <label for="directorName" style="font-weight: bold;">감독:</label>
             <input type="text" id="directorName" name="directorName" th:value="${movieDetails['directorName']}" readonly />
         </div>
-
-        <!-- 배급사 -->
         <div th:if="${movieDetails['companys'] != null}">
             <label for="companys" style="font-weight: bold;"> 배급사:</label>
             <input type="text" id="companys" name="companys" th:value="${movieDetails['companys']}" readonly />

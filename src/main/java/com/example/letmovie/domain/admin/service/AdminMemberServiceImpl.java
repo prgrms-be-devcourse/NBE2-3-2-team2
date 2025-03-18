@@ -26,15 +26,10 @@ public class AdminMemberServiceImpl {
 
     // 회원 수정
     public void updateMember(Member member) {
-        System.out.println("id : " + member.getId());
         Member existingMember = adminMemberRepository.findById(member.getId())
                 .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다. ID: " + member.getId()));
 
-        System.out.println("nickname : " + member.getNickname());
-        System.out.println("nickname : " + member.getGrade());
-        System.out.println("nickname : " + member.getMemberStatus());
         existingMember.updateNickname(member.getNickname());
-
         existingMember.changeGrade(member.getGrade());
         existingMember.changeStatus(member.getMemberStatus());
 

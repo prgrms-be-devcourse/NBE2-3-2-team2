@@ -14,8 +14,8 @@
             background-color: #f4f4f4;
             padding: 15px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            height: 100vh; /* 페이지 전체 높이로 설정 */
-            position: fixed; /* 고정된 위치로 설정 */
+            height: 100vh;
+            position: fixed;
         }
         nav h3 {
             margin-top: 0;
@@ -36,18 +36,16 @@
             color: #007BFF;
         }
         main {
-            margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+            margin-left: 220px;
             flex: 1;
             padding: 20px;
         }
     </style>
 </head>
 <body>
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
 <main>
     <h1>영화 삭제</h1>
-
     <h3>삭제할 영화의 ID를 입력해주세요.</h3>
     주의 : 영화를 상영종료 상태로 바꾸는 경우, 영화 정보 수정에서 처리해주세요.<br /><br />
     <form th:action="@{/admin/movie/delete/search}" method="get">
@@ -56,12 +54,10 @@
         <button type="submit">검색</button>
     </form>
 
-    <!-- 에러 메시지 -->
     <div th:if="${error != null}" style="color: red; font-weight: bold;">
         <p th:text="${error}"></p>
     </div>
 
-    <!-- 성공 메시지 -->
     <div th:if="${success != null}" style="color: green; font-weight: bold;">
         <p th:text="${success}"></p>
     </div>

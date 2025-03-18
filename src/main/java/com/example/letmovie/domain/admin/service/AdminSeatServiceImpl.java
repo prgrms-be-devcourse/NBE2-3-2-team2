@@ -25,7 +25,7 @@ public class AdminSeatServiceImpl {
 
     // 좌석
     public List<Screen> getAllScreens() {
-        return adminScreenRepository.findAll(); // 상영관 리스트 가져오기
+        return adminScreenRepository.findAll();
     }
 
     // 좌석 추가 로직
@@ -36,7 +36,7 @@ public class AdminSeatServiceImpl {
         for (int row = 1; row <= seatLow; row++) {
             for (int col = 1; col <= seatCol; col++) {
                 if (adminSeatRepository.existsByScreenAndSeatLowAndSeatCol(screen, row, col)) {
-                    continue; // 중복 방지
+                    continue;
                 }
                 Seat seat = Seat.builder()
                         .screen(screen)
@@ -74,7 +74,6 @@ public class AdminSeatServiceImpl {
         Screen screen = adminScreenRepository.findById(screenId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid screen ID"));
 
-        // showtime 테이블에서 해당 screenId가 존재하는지 확인
         boolean hasShowtime = adminShowtimeRepository.existsByScreenId(screenId);
         if (hasShowtime) {
             throw new IllegalStateException("해당 상영관에 상영 시간이 존재하여 좌석을 삭제할 수 없습니다.");

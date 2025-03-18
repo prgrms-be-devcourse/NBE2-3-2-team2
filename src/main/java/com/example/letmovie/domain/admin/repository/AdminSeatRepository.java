@@ -11,10 +11,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface AdminSeatRepository extends JpaRepository<Seat, Long> {
-    // 특정 상영관의 좌석 유무 확인
     boolean existsByScreenAndSeatLowAndSeatCol(Screen screen, int seatLow, int seatCol);
 
-    // 특정 상영관의 모든 좌석 가져오기
     List<Seat> findByScreenId(Long screenId);
 
     @Transactional

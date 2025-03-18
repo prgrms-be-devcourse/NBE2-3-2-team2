@@ -22,6 +22,9 @@ public enum ErrorCodes {
     SEAT_NOT_FOUND(HttpStatus.NOT_FOUND, "좌석을 찾을 수 없습니다."),
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 정보를 찾을 수 없습니다."),
     RESERVATION_CANCELLATION_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "상영 완료된 영화는 취소가 불가능합니다."),
+    SEAT_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "요청한 좌석 수보다 남은 좌석이 적습니다"),
+    SEAT_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "취소 시 남은 좌석이 전체 좌석 수를 초과합니다"),
+    INVALID_SEAT_PRICE(HttpStatus.BAD_REQUEST,"좌석 가격이 유효하지 않습니다."),
 
     // VerificationCode
     EMAIL_SEND_FAILED(HttpStatus.BAD_REQUEST, "이메일 전송 중 오류가 발생했습니다."),

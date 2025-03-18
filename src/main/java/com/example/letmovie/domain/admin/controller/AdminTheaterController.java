@@ -47,7 +47,7 @@ public class AdminTheaterController {
         try {
             Theater theater = adminService.findTheaterById(id);
             model.addAttribute("theater", theater);
-            return "admin/theater/admin_theater_modify"; // 극장 수정 뷰 이름
+            return "admin/theater/admin_theater_modify";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "해당 극장을 찾을 수 없습니다.");
             return "redirect:/admin/theater";

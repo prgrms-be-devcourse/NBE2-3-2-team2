@@ -1,6 +1,8 @@
 package com.example.letmovie.domain.movie.entity;
 
 import com.example.letmovie.domain.reservation.entity.Screen;
+import com.example.letmovie.global.exception.exceptionClass.reservation.ExceedTotalSeatsException;
+import com.example.letmovie.global.exception.exceptionClass.reservation.InsufficientSeatsException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -51,7 +53,7 @@ public class Showtime {
     public void removeSeats(int lose){
         int restSeats = remainingSeats-lose;
         if(restSeats < 0){
-            throw new IllegalStateException("좌석이 부족합니다 남은좌석 :" + remainingSeats );
+            throw new ExceedTotalSeatsException();
         }
         remainingSeats = restSeats;
     }
@@ -61,7 +63,7 @@ public class Showtime {
      */
     public void addSeats(int add){
         if (this.remainingSeats + add > this.totalSeats) {
-            throw new IllegalStateException("총 좌석 수를 초과할 수 없습니다.");
+            throw new InsufficientSeatsException();
         }
         remainingSeats += add;
     }

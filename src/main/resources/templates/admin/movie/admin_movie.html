@@ -13,8 +13,8 @@
             background-color: #f4f4f4;
             padding: 15px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            height: 100vh; /* 페이지 전체 높이로 설정 */
-            position: fixed; /* 고정된 위치로 설정 */
+            height: 100vh;
+            position: fixed;
         }
         nav h3 {
             margin-top: 0;
@@ -35,7 +35,7 @@
             color: #007BFF;
         }
         main {
-            margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+            margin-left: 220px;
             flex: 1;
             padding: 20px;
         }
@@ -66,17 +66,13 @@
 </head>
 <body>
 
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
 
-<!-- Main content -->
 <main>
     <h1>상영중인 영화</h1>
 
-    <!-- 저장된 Movie 테이블의 데이터 표시 -->
     <h3>현재 상영중인 영화 리스트 입니다.</h3>
 
-    <!--페이징-->
     <a th:if="${currentPage > 1}" th:href="@{/admin/movie(page=${currentPage - 1})}"><button>이전</button></a>
     <span th:text="'현재 페이지: ' + ${currentPage} + ' / ' + ${totalPages}"></span>
     <a th:if="${currentPage < totalPages}" th:href="@{/admin/movie(page=${currentPage + 1})}"><button>다음</button></a><br /><br />
@@ -107,18 +103,9 @@
             <td th:text="${movie.directorName}"></td>
             <td th:text="${movie.genreName}"></td>
             <td th:text="${movie.openDate}"></td>
-            <!-- 줄거리는 말줄임 표시 -->
-            <td>
-                <span class="plot" th:title="${movie.plot}" th:text="${movie.plot}"></span>
-            </td>
-            <!-- 이미지로 표시 -->
-            <td>
-                <img class="poster-img" th:src="${movie.posterImageUrl}" alt="포스터 이미지">
-            </td>
-            <!-- 이미지로 표시 -->
-            <td>
-                <img class="poster-img" th:src="${movie.stillImageUrl}" alt="포스터 이미지">
-            </td>
+            <td><span class="plot" th:title="${movie.plot}" th:text="${movie.plot}"></span></td>
+            <td><img class="poster-img" th:src="${movie.posterImageUrl}" alt="포스터 이미지"></td>
+            <td><img class="poster-img" th:src="${movie.stillImageUrl}" alt="포스터 이미지"></td>
             <td th:text="${movie.runtime}"></td>
             <td th:text="${movie.rating}"></td>
             <td th:text="${movie.salesAcc}"></td>

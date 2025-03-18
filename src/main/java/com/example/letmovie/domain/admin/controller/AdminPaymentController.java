@@ -29,7 +29,7 @@ public class AdminPaymentController {
     @GetMapping("/payment/membersearch")
     public String paymentMemberSearch(@RequestParam("inputnickname") String nickname, Model model) {
         try {
-            List<Member> members = adminService.findMemberByName(nickname); // 닉네임으로 검색
+            List<Member> members = adminService.findMemberByName(nickname);
             if(members != null) {
                 model.addAttribute("members", members);
             } else {

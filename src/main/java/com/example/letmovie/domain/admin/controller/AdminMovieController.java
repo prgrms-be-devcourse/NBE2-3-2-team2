@@ -22,15 +22,15 @@ public class AdminMovieController {
     // /admin/movie?page=1 : 영화목록
     @GetMapping("/movie")
     public String movie(
-            @RequestParam(defaultValue = "1") int page, // 현재 페이지 (0부터 시작)
-            @RequestParam(defaultValue = "10") int size, // 페이지 크기
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
             Model model) {
         Pageable pageable = PageRequest.of(page-1, size);
         Page<Movie> movies = adminService.findAllMovieswithPage(pageable);
 
-        model.addAttribute("movies", movies.getContent()); // 현재 페이지의 영화 목록
-        model.addAttribute("currentPage", page); // 현재 페이지 번호
-        model.addAttribute("totalPages", movies.getTotalPages()); // 총 페이지 수
+        model.addAttribute("movies", movies.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", movies.getTotalPages());
 
         return "admin/movie/admin_movie";
     }
@@ -44,20 +44,18 @@ public class AdminMovieController {
     // /admin/movie/post/search?putmovieNm=... : 영화 추가 검색 이후 화면
     @GetMapping("/movie/post/search")
     public String moviePostSearch(@RequestParam("putmovieNm") String movieNm, Model model) {
-
         try {
-            String movieCd = adminService.getMovieCodeByName(movieNm); // 영화 코드 가져오기
+            String movieCd = adminService.getMovieCodeByName(movieNm);
             if (movieCd != null) {
-                model.addAttribute("movieDetails", adminService.getMovieInfoByCode(movieCd)); // 상세 정보 가져오기
+                model.addAttribute("movieDetails", adminService.getMovieInfoByCode(movieCd));
             } else {
-                model.addAttribute("movieDetails", null); // 검색 결과가 없는 경우
+                model.addAttribute("movieDetails", null);
                 model.addAttribute("error", "검색 결과가 없습니다. 영화 제목을 정확히 기입해주세요.");
             }
         } catch (Exception e) {
-            model.addAttribute("movieDetails", null); // 오류 시 기본값 처리
+            model.addAttribute("movieDetails", null);
             model.addAttribute("error", "오류가 발생했습니다. 다시 시도해주세요.");
         }
-
 
         return "admin/movie/admin_movie_post_search";
     }
@@ -66,12 +64,12 @@ public class AdminMovieController {
     @PostMapping("/movie/post/add")
     public String addMovie(@ModelAttribute Movie movie, Model model) {
         try {
-            adminService.addMovie(movie); // 서비스 계층에서 데이터 저장 처리
+            adminService.addMovie(movie);
             model.addAttribute("success", "영화가 성공적으로 추가되었습니다!");
         } catch (Exception e) {
             model.addAttribute("error", "영화 추가 중 문제가 발생했습니다: " + e.getMessage());
         }
-        return "redirect:/admin/movie?page=1"; // 영화 목록으로 리다이렉트
+        return "redirect:/admin/movie?page=1";
     }
 
     // /admin/movie/modify : 영화 수정 첫화면
@@ -121,7 +119,7 @@ public class AdminMovieController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "오류가 발생했습니다. 수정에 실패했습니다.");
         }
-        return "redirect:/admin/movie?page=1"; // 영화 목록으로 리다이렉트
+        return "redirect:/admin/movie?page=1";
     }
 
     // /admin/movie/delete : 영화 삭제 첫화면
@@ -152,6 +150,6 @@ public class AdminMovieController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "영화 삭제 중 오류가 발생했습니다.");
         }
-        return "redirect:/admin/movie?page=1"; // 영화 목록으로 리다이렉트
+        return "redirect:/admin/movie?page=1";
     }
 }

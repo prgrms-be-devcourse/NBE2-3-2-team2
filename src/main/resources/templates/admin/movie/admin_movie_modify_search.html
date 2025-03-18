@@ -13,8 +13,8 @@
             background-color: #f4f4f4;
             padding: 15px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            height: 100vh; /* 페이지 전체 높이로 설정 */
-            position: fixed; /* 고정된 위치로 설정 */
+            height: 100vh;
+            position: fixed;
         }
         nav h3 {
             margin-top: 0;
@@ -35,38 +35,28 @@
             color: #007BFF;
         }
         main {
-            margin-left: 220px; /* 네비게이션 바 너비만큼 왼쪽 여백 */
+            margin-left: 220px;
             flex: 1;
             padding: 20px;
         }
     </style>
 </head>
 <body>
-
-<!-- Sidebar navigation -->
 <div th:replace="~{fragments/admin_sidebar :: sidebar}"></div>
-
-<!-- Main content -->
 <main>
     <h1>영화 수정</h1>
-
-    <!-- 검색 폼 -->
     <h3>수정할 영화 ID를 입력하세요.</h3>
     <form th:action="@{/admin/movie/modify/search}" method="get">
         <label for="movieId" style="font-weight: bold;">영화 ID:</label>
         <input type="number" id="movieId" name="movieId" required>
         <button type="submit">조회</button>
     </form>
-
-    <!-- 검색 폼 -->
     <h3>검색할 영화 이름를 입력하세요.</h3>
     <form th:action="@{/admin/movie/modify/idsearch}" method="get">
         <label for="movieNm" style="font-weight: bold;">영화 이름:</label>
         <input type="text" id="movieNm" name="movieNm" required>
         <button type="submit">조회</button>
     </form>
-
-    <!-- 수정 폼 -->
     <form th:action="@{/admin/movie/modify/ok}" method="post" th:if="${movie != null}">
         <h3>영화 정보 수정</h3>
         <input type="hidden" name="id" th:value="${movie.id}" />
@@ -90,12 +80,9 @@
 
         <button type="submit">수정</button>
     </form>
-
-    <!-- 검색 결과가 없는 경우 -->
     <div th:if="${error != null}" style="color: red; font-weight: bold; margin-top: 20px;">
         <p th:text="${error}"></p>
     </div>
 </main>
-
 </body>
 </html>

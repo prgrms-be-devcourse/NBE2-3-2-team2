@@ -12,20 +12,15 @@ import com.example.letmovie.domain.reservation.repository.ReservationRepository;
 import com.example.letmovie.domain.reservation.repository.SeatRepository;
 import com.example.letmovie.domain.reservation.repository.ShowtimeRepository;
 import com.example.letmovie.global.exception.exceptionClass.auth.MemberNotFoundException;
-import com.example.letmovie.global.exception.exceptionClass.reservation.SeatNotFound;
-import com.example.letmovie.global.exception.exceptionClass.reservation.ShowtimeNotFound;
+import com.example.letmovie.global.exception.exceptionClass.reservation.SeatNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * 비관적 락 테스트를 위한 서비스 코드
- */
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -38,7 +33,7 @@ public class PessimisticLockReservationService {
 
     @Transactional
     public ReservationResponseDTO reservation(List<String> seatList, Long memberId, Long showtimeId) {
-        Showtime showtime = showtimeRepository.findByIdWithPessimisticLock(showtimeId).orElseThrow(SeatNotFound::new);
+        Showtime showtime = showtimeRepository.findByIdWithPessimisticLock(showtimeId).orElseThrow(SeatNotFoundException::new);
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
         // 먼저 Reservation 생성
@@ -60,11 +55,11 @@ public class PessimisticLockReservationService {
 
             Long screenId = showtime.getScreen().getId();
             Seat seatEntity = seatRepository.findByColAndRowAndScreenId(col, row, screenId)
-                    .orElseThrow(SeatNotFound::new);
+                    .orElseThrow(SeatNotFoundException::new);
 
             if(!seatEntity.isAble()) {
                 char rowLabel = (char) ('A' + row - 1);
-                throw new SeatNotFound("좌석 " + rowLabel  + "-" + col + "는 이미 선택된 좌석입니다.");
+                throw new SeatNotFoundException("좌석 " + rowLabel  + "-" + col + "는 이미 선택된 좌석입니다.");
             }
 
             ReservationSeat reservationSeat = ReservationSeat.createReservationSeat(seatEntity, showtime);

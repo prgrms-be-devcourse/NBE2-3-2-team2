@@ -26,16 +26,10 @@ public interface ShowtimeRepository  extends JpaRepository<Showtime, Long> {
             @Param("movieName") String movieName,
             @Param("showtimeDate") LocalDate showtimeDate);
 
-    /**
-     * 비관적 락 테스트 - 쓰기
-     */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT s FROM Showtime s WHERE s.id = :id")
     Optional<Showtime> findByIdWithPessimisticLock(@Param("id") Long id);
 
-    /**
-     * 낙관적 락 테스트
-     */
     @Lock(LockModeType.OPTIMISTIC)
     @Query("SELECT s FROM Showtime s WHERE s.id = :id")
     Optional<Showtime> findByIdWithOptimisticLock(@Param("id") Long id);

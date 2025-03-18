@@ -25,8 +25,7 @@ public class AdminPaymentServiceImpl {
 
     // 특정 회원의 결제 내역 조회
     public List<PaymentHistory> findPaymentHistoryByMemberId(Long memberId) {
-        String partnerUserId = memberId.toString(); // Member의 ID를 partnerUserId와 매칭
+        String partnerUserId = memberId.toString();
         return adminPaymentHistoryRepository.findByPartnerUserId(partnerUserId);
-        //return adminPaymentHistoryRepository.findByPaymentMemberId(memberId);
     }
 }

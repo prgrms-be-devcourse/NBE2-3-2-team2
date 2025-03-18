@@ -49,7 +49,7 @@ public class AdminSeatController {
     public String editSeatForm(@PathVariable Long seatId, Model model) {
         Seat seat = adminService.getSeatById(seatId);
         model.addAttribute("seat", seat);
-        model.addAttribute("seatTypes", SeatType.values()); // Enum 타입 설정
+        model.addAttribute("seatTypes", SeatType.values());
         return "admin/seat/admin_seat_edit";
     }
 
@@ -65,9 +65,9 @@ public class AdminSeatController {
     public String deleteAllSeats(@PathVariable Long screenId, RedirectAttributes redirectAttributes) {
         try {
             adminService.deleteAllSeatsByScreenId(screenId);
-            redirectAttributes.addFlashAttribute("message", "All seats for Screen ID " + screenId + " have been deleted.");
+            redirectAttributes.addFlashAttribute("message", "(Screen ID : " + screenId + ") 좌석이 성공적으로 삭제되었습니다.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Failed to delete seats: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "좌석 삭제 중 문제가 발생했습니다. : " + e.getMessage());
         }
         return "redirect:/admin/seat";
     }
