@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     @Query("SELECT new com.example.letmovie.domain.member.dto.response.ReservationDetailsDTO( " +
@@ -22,6 +23,22 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "JOIN ReservationSeat rs ON rs.reservation.id = r.id " +
             "JOIN rs.seat st " +
             "WHERE r.member.id = :memberId " +
-            "ORDER BY s.showtimeDate DESC, s.showtimeTime DESC")
-    List<ReservationDetailsDTO> findReservationsWithSeats(@Param("memberId") Long memberId);
+            "ORDER BY s.showtimeDate, s.showtimeTime DESC")
+    List<ReservationDetailsDTO> findReservationsByMemberId(@Param("memberId") Long memberId);
+
+    @Query("SELECT new com.example.letmovie.domain.member.dto.response.SeatDTO( " +
+            "st.id, st.seatLow, st.seatCol) " +
+            "FROM Reservation r " +
+            "JOIN r.reservationSeats rs " +
+            "JOIN rs.seat st " +
+            "WHERE r.id = :reservationId")
+    List<SeatDTO> findSeatsByReservationId(@Param("reservationId") Long reservationId);
+
+    @Query("SELECT r FROM Reservation r " +
+            "JOIN FETCH r.member " +
+            "JOIN FETCH r.showTime st " +
+            "JOIN FETCH st.movie " +
+            "JOIN FETCH st.screen " +
+            "WHERE r.id = :id")
+    Optional<Reservation> findReservationWithMemberShowTimeAndMovie(@Param("id") Long id);
 }

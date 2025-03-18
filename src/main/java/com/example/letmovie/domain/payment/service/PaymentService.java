@@ -1,5 +1,4 @@
 package com.example.letmovie.domain.payment.service;
-
 import com.example.letmovie.domain.member.repository.MemberRepository;
 import com.example.letmovie.domain.payment.dto.request.PaymentRequest;
 import com.example.letmovie.domain.payment.dto.response.PaymentResponse;
@@ -21,11 +20,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 
 @Service
 @RequiredArgsConstructor
@@ -46,9 +43,8 @@ public class PaymentService {
     @Value("${kakao.pay.secret.key}")
     private String secretKey;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public PaymentResponse.Ready ready(PaymentRequest.Info request) {
-
         String movieName = initializePayment(request);
         HttpHeaders headers = httpRequestUtil.createHeaders(secretKey);
         Map<String, String> parameters = paymentParamProvider.createReadyParams(request,movieName);
@@ -113,7 +109,7 @@ public class PaymentService {
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PaymentResponse.Get> getMemberPayment(Long memberId) {
         List<Payment> payments = paymentRepository.findByMemberId(memberId);
         return payments.stream()
@@ -122,11 +118,12 @@ public class PaymentService {
     }
 
     private String initializePayment(PaymentRequest.Info request) {
+        Reservation reservation = reservationRepository.findReservationWithMemberShowTimeAndMovie(request.reservation_id())
+                .orElseThrow(() -> new PaymentException(ErrorCodes.PAYMENT_NOT_FOUND));
+
         Payment payment = Payment.builder()
-                .member(memberRepository.findById(request.member_id())
-                        .orElseThrow(() -> new PaymentException(ErrorCodes.PAYMENT_NOT_FOUND)))
-                .reservation(reservationRepository.findById(request.reservation_id())
-                        .orElseThrow(() -> new PaymentException(ErrorCodes.PAYMENT_NOT_FOUND)))
+                .member(reservation.getMember())
+                .reservation(reservation)
                 .amount(request.totalPrice())
                 .paymentStatus(PaymentStatus.AWAITING_PAYMENT)
                 .build();
@@ -150,7 +147,6 @@ public class PaymentService {
 
         payment.updatePaymentMethodType(paymentHistory.getPaymentMethodType());
         paymentHistoryRepository.save(paymentHistory);
-
     }
 
 

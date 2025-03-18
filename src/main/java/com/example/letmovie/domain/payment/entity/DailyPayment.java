@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class MonthlyPayment {
+public class DailyPayment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +22,12 @@ public class MonthlyPayment {
     private int year;
     private int month;
     private int day;
+    private int totalAmount;
     private Long totalCount;
     private LocalDateTime createdAt;
 
     @Builder
-    public MonthlyPayment(Long id, int year, int month, int day, Long totalCount) {
+    public DailyPayment(Long id, int year, int month, int day, int totalAmount, Long totalCount) {
         this.id = id;
         this.year = year;
         this.month = month;
