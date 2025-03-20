@@ -32,7 +32,7 @@ public class MyPageService {
     // 예매 목록 조회
     @Transactional(readOnly = true)
     public List<ReservationDetailsDTO> getReservationsWithSeats(Long memberId) {
-        List<ReservationDetailsDTO> reservations = reservationRepository.findReservationsWithSeats(memberId);
+        List<ReservationDetailsDTO> reservations = reservationRepository.findReservationsByMemberId(memberId);
         Map<Long, ReservationDetailsDTO> reservationMap = new HashMap<>();
 
         for (ReservationDetailsDTO reservation : reservations) {

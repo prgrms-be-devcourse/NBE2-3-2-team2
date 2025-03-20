@@ -1,6 +1,7 @@
 package com.example.letmovie.domain.reservation.repository;
 
 import com.example.letmovie.domain.member.dto.response.ReservationDetailsDTO;
+import com.example.letmovie.domain.member.dto.response.SeatDTO;
 import com.example.letmovie.domain.reservation.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,7 +39,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "JOIN FETCH r.member " +
             "JOIN FETCH r.showTime st " +
             "JOIN FETCH st.movie " +
-            "JOIN FETCH st.screen " +
             "WHERE r.id = :id")
     Optional<Reservation> findReservationWithMemberShowTimeAndMovie(@Param("id") Long id);
 }
